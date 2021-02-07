@@ -1,0 +1,26 @@
+{% load static %}
+
+    <script
+    src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
+    crossorigin="anonymous"></script>
+        
+    <script src="{% static 'app.js' %}"></script>
+    
+
+    <script>
+        // build the json album images collection 
+        window.djangoAlbumImages = [
+            {% for item in images %}
+                {
+                    src: '{{ item.image.url }}',
+                    w:  {{ item.width }},
+                    h:  {{ item.height }}
+                },
+            {% endfor %}
+        ];
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js" integrity="sha384-jkeJ/ETDRD/P4Y3I3CQi1QIwrEJjR9GdAZV2/aqDwwgA5ldCNiExYJeBwKyQC/+q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js" integrity="sha384-HotcxRWS6/oszHPwknjGnd066fV8+ycnO5TXDcOscFWvTtaiCtEEv+9s5Qrn1iJD" crossorigin="anonymous"></script>
+    

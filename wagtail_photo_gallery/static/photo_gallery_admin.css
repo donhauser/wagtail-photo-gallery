@@ -1,0 +1,191 @@
+
+.select-and-sort .image_field label {
+    display: none;
+}
+
+ul.select-and-sort {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+ul.select-and-sort li {
+    display: inline-block;
+    padding: 0;
+    margin: 4px;
+}
+
+ul.select-and-sort li.selected:after {
+    content:'';
+    display: block;
+    position: absolute;
+    top: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    width: 100%;
+    height: 100%;
+    border: 3px solid rgba(0, 178, 255,0.6);
+    box-sizing: border-box;
+    
+    margin: 0;
+    
+    /* Make the underlying element clickable */
+    pointer-events: none;
+}
+
+ul.select-and-sort.selectable > li:before {
+  left: .3em;
+  top: .3em;
+  color: transparent;
+  font-size: 2em;
+  content: '\2713';
+  position: absolute;
+  
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 5px;
+  
+  
+  background-color: rgba(0,0,0,0.3);
+  
+  z-index: 100;
+}
+
+
+ul.select-and-sort.selectable > li.selected:before {
+  
+  color: white;
+  
+  background-color: #235ca1;
+}
+
+
+ul.select-and-sort .controls {
+    display: none;
+}
+
+ul.select-and-sort li img {
+    max-width: 100px;
+    max-height: 100px;
+    
+    display: block;
+    margin: auto;
+    
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    
+    min-height: 70px;
+    min-width: 70px;
+    object-fit: cover;
+}
+
+/*
+ul.select-and-sort li img {
+    
+    width: 100px;
+    height: 100px;
+    
+    object-fit: cover;
+    
+    display: block;
+    margin: auto;
+}*/
+
+/* hidden field for wagtail*/
+.hidden_field {
+    visibility: hidden;
+}
+
+ul.select-and-sort:not(.selectable) .cover-image::after {
+    content:'\1F4F8  Cover' !important;
+    display: table-cell;
+    position: absolute;
+    top: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    width: 100%;
+    height: 2em;
+    padding: 0.3em;
+    font-weight: bold;
+    text-align: center;
+    _border: 3px solid rgba(0, 178, 255,0.6);
+    box-sizing: border-box;
+}
+
+ul.select-and-sort li {
+    margin: 0;
+}
+
+ul.select-and-sort .field-content {
+    width: 100%;
+}
+
+ul.select-and-sort li .input {
+    width: 100px;
+    height: 100px;
+    display: inline-block;
+    /* background-color: #333; */
+}
+
+/* TODO WAGTAIL: create hide field class */
+ul.select-and-sort .image_field:not(:first-child) {
+    display: none;
+}
+
+.ui-sortable img {
+    pointer-events: none;
+}
+
+.ui-sortable ul {
+    user-select: none;   
+    margin: 0;
+    height:100px;
+}
+
+.ui-state-highlight {
+    height: 100px;
+    width: 100px;
+}
+
+.ui-sortable-helper {
+    border: 2px solid #235ca1 !important;
+    display: none;
+}
+
+#contextMenu {
+    position:absolute;
+    background-color: white;
+    z-index: 2000;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+#contextMenu ul {
+    margin:0;
+    padding: 0;
+}
+
+#contextMenu li {
+    padding:5px;
+}
+
+#contextMenu li.delete::before {
+    content:'\1F5D1';
+    padding-right: 0.5em;
+}
+
+
+#contextMenu li.move::before {
+    content:'\21C4';
+    padding-right: 0.5em;
+}
+
+
+#contextMenu li.check::before {
+    content:'\2713';
+    padding-right: 0.5em;
+}
+
+
+#contextMenu li.cover::before {
+    content:'\1F4F8';
+    padding-right: 0.5em;
+}
+ 	

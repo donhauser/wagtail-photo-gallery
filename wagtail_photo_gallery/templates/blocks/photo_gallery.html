@@ -1,0 +1,20 @@
+<div class="photo-gallery-container">
+    {% for album in albums %}
+    
+    <div class="photo-gallery-album-card">
+        <img src="{{ album.cover.thumb.url | default:album.images.first.thumb.url }}" alt="{{ album.title }}"/>
+        
+        <div class="photo-gallery-album-description">
+        
+            <span>{{ album.title }}</span>
+            <p>{{ album.description|truncatechars:120 }}</p>
+            
+            <a href="{{ detail_url }}{{ album.slug }}">
+                Mehr Bilder
+            </a>
+            
+        </div>
+    </div>
+
+    {% endfor %}
+</div>
