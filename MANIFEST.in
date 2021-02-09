@@ -1,0 +1,3 @@
+recursive-include wagtail_photo_gallery/templates/ *.*
+include wagtail_photo_gallery/static/* 
+include wagtail_photo_gallery/migrations/* 

@@ -2,15 +2,14 @@
 from wagtail.core import hooks
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 
-from wagtailcache.cache import clear_cache
-
-from .models import Album, AlbumImage
+from .models import Album
 
 from wagtail.admin.edit_handlers import FieldPanel
 
 
 from django.utils.translation import gettext as _
 
+@modeladmin_register
 class AlbumModelWagtailAdmin(ModelAdmin):
     model = Album
     menu_label = _('Albums')
@@ -22,9 +21,6 @@ class AlbumModelWagtailAdmin(ModelAdmin):
     list_filter = ('collection',)
     #search_fields = ('fields',)
 
-    
-# Now you just need to register your customised ModelAdmin class with Wagtail
-modeladmin_register(AlbumModelWagtailAdmin)
 
 from django.templatetags.static import static
 from django.utils.html import format_html

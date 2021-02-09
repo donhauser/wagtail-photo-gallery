@@ -12,9 +12,17 @@ The `GalleryBlock` can be used in wagtails `StreamField` to embed albums into yo
 
 ## Installation
 
-`pip install <link will go here>`
+```sh
+pip install wagtail-photo-gallery
+```
 
-It is suggested to use `pillow-simd` for fastest possible image uploading (Faster resizing)
+If you don't have pillow installed, install it via
+
+```sh
+pip install pillow
+```
+
+For the fastest possible image uploading (Faster resizing) use `pillow-simd` instead.
 
 ## Settings
 
@@ -25,6 +33,12 @@ INSTALLED_APPS = [
     'wagtail.contrib.routable_page',
     'generic_chooser',
 ]
+```
+
+Update your database structure using (remember to create a **backup first**):
+
+```sh
+./manage.py migrate
 ```
 
 ## Example
@@ -66,4 +80,5 @@ you need to include the following css code in your gallery page (`YourWagtailPag
 This project was initially planned as a port of [django-photo-gallery](https://github.com/VelinGeorgiev/django-photo-gallery) as the name of this addon suggests.
 Never the less, almost the entrie code is changed completely now due to incompability with wagtail and the incorporation of [django-modelcluster](https://github.com/wagtail/django-modelcluster).
 
+Contributions to this project are welcome!
 
