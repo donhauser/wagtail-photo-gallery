@@ -51,6 +51,8 @@ all you need to do is to inherit from `ImageGalleryMixin` and to add `GalleryBlo
 from wagtail.core.models import Page
 from wagtail.core.fields import StreamField
 
+from wagtail.admin.edit_handlers import StreamFieldPanel
+
 from wagtail_photo_gallery.models import GalleryBlock, ImageGalleryMixin
 
 class YourWagtailPage(ImageGalleryMixin, Page):
