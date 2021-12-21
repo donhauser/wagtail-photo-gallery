@@ -9,6 +9,11 @@ from wagtail.core.utils import resolve_model_string
 from .widgets import CollectionChooser
 
 class CollectionChooserBlock(blocks.ChooserBlock):
+    
+    def get_form_state(self, value):
+        # this function is required for wagtail > 2.12 (because it uses 'telepath')
+        
+        return self.widget.get_value_data(value)
 
     @property
     def target_model(self):
