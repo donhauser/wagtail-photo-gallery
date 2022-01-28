@@ -7,7 +7,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setuptools.setup(
     name='wagtail-photo-gallery',
-    version='0.0.2',
+    version='0.0.3',
     description='An image gallery plugin for Wagtail',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -18,7 +18,7 @@ setuptools.setup(
     package_data={'': ['LICENSE', 'templates/*', 'static/*', 'migrations/*']},
     include_package_data=True,
     python_requires=">=3.6",
-    install_requires=["wagtail", "wagtail-generic-chooser", "django-imagekit"],
+    install_requires=["wagtail", "wagtail-generic-chooser>=0.2.1", "django-imagekit"],
     extras_require = {
         'pillow':["pillow"],
         'pillow-simd':["pillow-simd"],

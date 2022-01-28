@@ -129,11 +129,11 @@ ul.select-and-sort .image_field:not(:first-child) {
     display: none;
 }
 
-.ui-sortable img {
+ul.select-and-sort.ui-sortable img {
     pointer-events: none;
 }
 
-.ui-sortable ul {
+ul.select-and-sort.ui-sortable ul {
     user-select: none;   
     margin: 0;
     height:100px;

@@ -2,7 +2,9 @@
     {% for album in albums %}
     
     <div class="photo-gallery-album-card">
-        <img src="{{ album.cover.thumb.url | default:album.images.first.thumb.url }}" alt="{{ album.title }}"/>
+        {% if album.cover.thumb or album.images.first %}
+            <img src="{{ album.cover.thumb.url | default:album.images.first.thumb.url }}" alt="{{ album.title }}"/>
+        {% endif %}
         
         <div class="photo-gallery-album-description">
         
