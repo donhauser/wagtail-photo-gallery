@@ -147,9 +147,17 @@ class SelectAndSort {
         $(this.element.children(".selected")[0]).trigger(event);
     }
     
-    updateContextMenu() {
+    updateContextMenu(e) {
         // update the context menu (for different menus for different modes)
         let contextMenu;
+
+        let coverText;
+
+        if(!e.hasClass("cover-image")) {
+            coverText = "Set as cover";
+        } else {
+            coverText = "Unset as cover";
+        }
         
         if(this.selectMode) {
             contextMenu = [
@@ -176,7 +184,20 @@ class SelectAndSort {
                 {class: "delete", text: "Delete", click: () => {
                     this.deleteElement(this.rightClickElement);
                 }},
-                
+                {class: "cover", text: coverText, click: () => {
+                    if(this.rightClickElement.hasClass("cover-image")) {
+                        this.rightClickElement.removeClass("cover-image");
+                        $("#id_cover").val();
+                    } else {
+                        // lookup the django id of the clicked element and put it in the <input> field
+                        let new_cover = $('input[name$="-id"]', this.rightClickElement).val();
+                        $("#id_cover").val(new_cover);
+
+                        // update css classes
+                        $(".cover-image").removeClass("cover-image");
+                        this.rightClickElement.addClass("cover-image");
+                    }
+                }},
                 ...this.createContextMenu(this) // user defined menu
             ];
         }
@@ -193,7 +214,7 @@ class SelectAndSort {
         
         element.toggleClass("selectable", value)
         
-        this.updateContextMenu()
+        //this.updateContextMenu()
         
         if(value) {
             element.sortable("disable");
@@ -238,9 +259,10 @@ class SelectAndSort {
         this.element.children()
         .contextmenu(function(e) {  // show custom context menu (right click)
                 self.rightClickElement = $(this);
-                menu.show()
-                menu.position({my: "left+3 top-3", of:e, collision: "none fit"})
-                e.preventDefault()
+                self.updateContextMenu(self.rightClickElement);
+                menu.show();
+                menu.position({my: "left+3 top-3", of:e, collision: "none fit"});
+                e.preventDefault();
             }
         )
         .mousedown(function(e) {
@@ -305,22 +327,6 @@ $(function() {
     var ss = new SelectAndSort(
         "#id_images-FORMS",
         {
-            contextMenu: instance => {
-                if(!instance.selectMode) return [
-                    {
-                        class: "cover", text: "Set as cover", click: () => {
-                            // lookup the django id of the clicked element and put it in the <input> field
-                            let new_cover = $('input[name$="-id"]', instance.rightClickElement).val();
-                            $("#id_cover").val(new_cover);
-                            
-                            // update css classes
-                            $(".cover-image", element).removeClass("cover-image");
-                            instance.rightClickElement.addClass("cover-image");
-                        }
-                    },
-                ]
-                else return []
-            },
             sortUpdate: instance => {
                 
                 // update all orders according to new sorting
