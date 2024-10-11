@@ -1,3 +1,4 @@
-Django>=3.2,<3.3
-wagtail>=2.13,<2.14
-wagtail-photo-gallery>0.0.1
+Django==4
+wagtail==4.1
+wagtail-generic-chooser  # deprecated for wagtail 6
+django-imagekit
