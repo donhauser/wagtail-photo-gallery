@@ -35,7 +35,7 @@ class SelectAndSort {
         this.rightClickElement;
         
         // append custom contextmenu to <body>
-        this.menu = $('<nav>', {id: 'contextMenu'})
+        this.menu = $('<nav>', {id: 'contextMenu', 'class': 'wagtail-photo-gallery'})
         .appendTo($("body"));
         
         

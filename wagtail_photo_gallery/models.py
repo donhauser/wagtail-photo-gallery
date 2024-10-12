@@ -5,16 +5,21 @@ from imagekit.processors import ResizeToFit
 
 from django import forms
 
-from wagtail.admin.edit_handlers import HelpPanel, FieldPanel, ObjectList, TabbedInterface, InlinePanel, MultiFieldPanel
+from wagtail.admin.edit_handlers import HelpPanel, FieldPanel, ObjectList, TabbedInterface, MultiFieldPanel
 from wagtail.models import Orderable
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
 
+from .panels import AlbumInlinePanel
 from .forms import AlbumForm
 from .widgets import PictureWidget
 
 from wagtail.coreutils import resolve_model_string
+
+HELP_TEXT = """Grab an image and drag it around to change its position.
+Holding down the left mouse button can be used for selecting multiple images at once, which can be dragged around with the middle mouse button.
+"""
 
 class Album(ClusterableModel):
     
@@ -55,15 +60,7 @@ class Album(ClusterableModel):
         FieldPanel('collection'),
         FieldPanel('description'),
         FieldPanel('zip', heading="Upload a .zip file"),
-        MultiFieldPanel([
-            HelpPanel('<h2>How to sort and delete images</h2>'+
-                      'Use drag-and-drop to change the position of an image.<br>'+
-                      'Hold down the right mouse button when hovering an image to enter the selecting mode.<br>'+
-                      'Right click an image to open up the menu, e.g. for deleting.<br>'+
-                      'You may use the middle mouse button to drag around multiple selected images.'
-                      ),
-            InlinePanel('images'),
-        ], heading="Album Images"),
+        AlbumInlinePanel('images', heading="Album Images", help_text=HELP_TEXT),
         FieldPanel('cover', widget=forms.widgets.Input, classname="hidden_field")
     ]
     

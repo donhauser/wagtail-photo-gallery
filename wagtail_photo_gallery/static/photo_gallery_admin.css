@@ -1,20 +1,20 @@
 
-.select-and-sort .image_field label {
-    display: none;
-}
-
-ul.select-and-sort {
+.album-inline-panel .select-and-sort {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5em;
+    background-color: #eee;
+    padding: 1em;
 }
 
-ul.select-and-sort li {
+.album-inline-panel  .select-and-sort .ui-sortable-handle {
     display: inline-block;
     padding: 0;
     margin: 4px;
 }
 
-ul.select-and-sort li.selected:after {
+.album-inline-panel .select-and-sort .ui-sortable-handle.selected:after {
     content:'';
     display: block;
     position: absolute;
@@ -31,7 +31,7 @@ ul.select-and-sort li.selected:after {
     pointer-events: none;
 }
 
-ul.select-and-sort.selectable > li:before {
+.album-inline-panel .select-and-sort.selectable > .ui-sortable-handle:before {
   left: .3em;
   top: .3em;
   color: transparent;
@@ -49,19 +49,44 @@ ul.select-and-sort.selectable > li:before {
 }
 
 
-ul.select-and-sort.selectable > li.selected:before {
+.album-inline-panel .select-and-sort.selectable > .ui-sortable-handle.selected:before {
   
   color: white;
   
   background-color: #235ca1;
 }
 
-
-ul.select-and-sort .controls {
-    display: none;
+.album-inline-panel .ui-sortable-handle {
+    margin: 0;
+    background-color: white;
+    box-shadow: 0 0 0.3em rgba(0,0,0,0.2);
 }
 
-ul.select-and-sort li img {
+.album-inline-panel .ui-sortable-handle .w-panel{
+    margin: 0;
+}
+
+.album-inline-panel .ui-sortable-handle .w-field__wrapper{
+    margin: 0;
+} 
+
+.album-inline-panel .ui-sortable-handle .w-field__input {
+    padding: 0.2em;
+}
+
+.album-inline-panel .ui-sortable-handle .w-panel__content {
+    background: none; /* remove wagtails guide-line-vertical */
+}
+
+ 	
+.album-inline-panel .w-mb-4 {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 1em;
+}
+
+
+.album-inline-panel .select-and-sort .ui-sortable-handle img {
     max-width: 100px;
     max-height: 100px;
     
@@ -69,32 +94,13 @@ ul.select-and-sort li img {
     margin: auto;
     
     position: relative;
-    top: 50%;
-    transform: translateY(-50%);
     
     min-height: 70px;
     min-width: 70px;
     object-fit: cover;
 }
 
-/*
-ul.select-and-sort li img {
-    
-    width: 100px;
-    height: 100px;
-    
-    object-fit: cover;
-    
-    display: block;
-    margin: auto;
-}*/
-
-/* hidden field for wagtail*/
-.hidden_field {
-    visibility: hidden;
-}
-
-ul.select-and-sort:not(.selectable) .cover-image::after {
+.album-inline-panel .select-and-sort:not(.selectable) .cover-image::after {
     content:'\1F4F8  Cover' !important;
     display: table-cell;
     position: absolute;
@@ -105,51 +111,40 @@ ul.select-and-sort:not(.selectable) .cover-image::after {
     padding: 0.3em;
     font-weight: bold;
     text-align: center;
-    _border: 3px solid rgba(0, 178, 255,0.6);
     box-sizing: border-box;
 }
 
-ul.select-and-sort li {
+.album-inline-panel .select-and-sort .ui-sortable-handle {
     margin: 0;
+    position: relative;
 }
 
-ul.select-and-sort .field-content {
-    width: 100%;
-}
-
-ul.select-and-sort li .input {
+.album-inline-panel .select-and-sort .ui-sortable-handle .input {
     width: 100px;
     height: 100px;
     display: inline-block;
-    /* background-color: #333; */
 }
 
-/* TODO WAGTAIL: create hide field class */
-ul.select-and-sort .image_field:not(:first-child) {
-    display: none;
-}
-
-ul.select-and-sort.ui-sortable img {
+.album-inline-panel .select-and-sort.ui-sortable img {
     pointer-events: none;
 }
 
-ul.select-and-sort.ui-sortable ul {
+.album-inline-panel .select-and-sort.ui-sortable ul {
     user-select: none;   
     margin: 0;
     height:100px;
 }
 
-.ui-state-highlight {
+.album-inline-panel .ui-state-highlight {
     height: 100px;
     width: 100px;
 }
 
-.ui-sortable-helper {
-    border: 2px solid #235ca1 !important;
-    display: none;
+.album-inline-panel .ui-sortable-helper {
+    box-shadow: 0 0 0.3em var(--w-color-primary);
 }
 
-#contextMenu {
+#contextMenu.wagtail-photo-gallery {
     position:absolute;
     background-color: white;
     z-index: 2000;
@@ -157,35 +152,34 @@ ul.select-and-sort.ui-sortable ul {
     border-radius: 5px;
 }
 
-#contextMenu ul {
+#contextMenu.wagtail-photo-gallery ul {
     margin:0;
     padding: 0;
 }
 
-#contextMenu li {
+#contextMenu.wagtail-photo-gallery li {
     padding:5px;
 }
 
-#contextMenu li.delete::before {
+#contextMenu.wagtail-photo-gallery li.delete::before {
     content:'\1F5D1';
     padding-right: 0.5em;
 }
 
 
-#contextMenu li.move::before {
+#contextMenu.wagtail-photo-gallery li.move::before {
     content:'\21C4';
     padding-right: 0.5em;
 }
 
 
-#contextMenu li.check::before {
+#contextMenu.wagtail-photo-gallery li.check::before {
     content:'\2713';
     padding-right: 0.5em;
 }
 
 
-#contextMenu li.cover::before {
+#contextMenu.wagtail-photo-gallery li.cover::before {
     content:'\1F4F8';
     padding-right: 0.5em;
 }
- 	
