@@ -1,9 +1,9 @@
 from django.db import models
 
-from wagtail.core.models import Page
+from wagtail.models import Page
 
-from wagtail.core.fields import StreamField
-from wagtail.admin.edit_handlers import StreamFieldPanel
+from wagtail.fields import StreamField
+from wagtail.admin.edit_handlers import FieldPanel
 
 from wagtail_photo_gallery.models import GalleryBlock, ImageGalleryMixin
 
@@ -13,11 +13,11 @@ class HomePage(ImageGalleryMixin, Page):
         #...
         ("gallery", GalleryBlock()),
         #...
-    ], blank=True)
+    ], blank=True, use_json_field=True)
     
     # content panel for the CMS (same as always)
     content_panels = Page.content_panels + [
-        StreamFieldPanel("content"),
+        FieldPanel("content"),
     ]
     
     

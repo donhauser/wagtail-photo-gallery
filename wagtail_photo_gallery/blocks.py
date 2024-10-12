@@ -1,9 +1,9 @@
 
 from django.utils.functional import cached_property
-from wagtail.core import blocks
+from wagtail import blocks
 
 
-from wagtail.core.utils import resolve_model_string
+from wagtail.coreutils import resolve_model_string
 
 
 from .widgets import CollectionChooser

@@ -1,5 +1,5 @@
 
-from wagtail.core.utils import resolve_model_string
+from wagtail.coreutils import resolve_model_string
 
 from django.contrib.admin.utils import quote
 from django.urls import reverse
