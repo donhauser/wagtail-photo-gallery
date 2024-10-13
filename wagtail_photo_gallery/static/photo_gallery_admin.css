@@ -4,6 +4,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    justify-content: space-evenly;
     gap: 0.5em;
     background-color: #eee;
     padding: 1em;
@@ -31,6 +32,7 @@
 } 
 
 .album-inline-panel .select-and-sort .ui-sortable-handle .w-field__input {
+    margin: 0;
     padding: 0.2em;
 }
 

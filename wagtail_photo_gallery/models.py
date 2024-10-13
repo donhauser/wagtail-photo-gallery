@@ -15,7 +15,7 @@ from django.shortcuts import render
 from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 
-from wagtail.admin.edit_handlers import HelpPanel, FieldPanel, ObjectList, TabbedInterface, MultiFieldPanel
+from wagtail.admin.panels import HelpPanel, FieldPanel, ObjectList, TabbedInterface, MultiFieldPanel
 from wagtail.models import Orderable
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.coreutils import resolve_model_string

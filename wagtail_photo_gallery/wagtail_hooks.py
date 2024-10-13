@@ -2,8 +2,6 @@
 from wagtail import hooks
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 
-from wagtail.admin.edit_handlers import FieldPanel
-
 from django.utils.translation import gettext_lazy as _
 from django.templatetags.static import static
 from django.utils.html import format_html

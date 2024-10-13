@@ -13,16 +13,12 @@ The `GalleryBlock` can be used in wagtails `StreamField` to embed albums into yo
 ## Installation
 
 ```sh
-pip install wagtail-photo-gallery
+pip install wagtail-photo-gallery[pillow]
+# or
+pip install wagtail-photo-gallery[pillow-simd]
 ```
 
-If you don't have pillow installed, install it via
-
-```sh
-pip install pillow
-```
-
-For the fastest possible image uploading (Faster resizing) use `pillow-simd` instead.
+If you need the fastest possible image uploading (Faster resizing) use `pillow-simd`.
 
 ## Settings
 
