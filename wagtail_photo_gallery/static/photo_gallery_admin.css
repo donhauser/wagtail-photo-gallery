@@ -1,4 +1,5 @@
 
+/* sortable album image container */
 .album-inline-panel .select-and-sort {
     display: flex;
     flex-wrap: wrap;
@@ -8,12 +9,40 @@
     padding: 1em;
 }
 
+/* image handle */
 .album-inline-panel  .select-and-sort .ui-sortable-handle {
     display: inline-block;
     padding: 0;
-    margin: 4px;
+    margin: 0;
+    position: relative;
+    background-color: white;
+    box-shadow: 0 0 0.3em rgba(0,0,0,0.2);
+    cursor: grab;
 }
 
+
+/* wagtail layout fixes */
+.album-inline-panel .select-and-sort .ui-sortable-handle .w-panel{
+    margin: 0;
+}
+
+.album-inline-panel .select-and-sort .ui-sortable-handle .w-field__wrapper{
+    margin: 0;
+} 
+
+.album-inline-panel .select-and-sort .ui-sortable-handle .w-field__input {
+    padding: 0.2em;
+}
+
+.album-inline-panel .select-and-sort .ui-sortable-handle .w-panel__content {
+    background: none; /* remove wagtails guide-line-vertical */
+}
+
+.album-inline-panel .select-and-sort .ui-sortable-handle .w-panel__wrapper:not(:first-child) {
+    display: none;
+}
+
+/* decoration for selected handles */
 .album-inline-panel .select-and-sort .ui-sortable-handle.selected:after {
     content:'';
     display: block;
@@ -24,67 +53,35 @@
     height: 100%;
     border: 3px solid rgba(0, 178, 255,0.6);
     box-sizing: border-box;
-    
     margin: 0;
-    
-    /* Make the underlying element clickable */
-    pointer-events: none;
+    pointer-events: none; /* Make the underlying element clickable */
 }
 
-.album-inline-panel .select-and-sort.selectable > .ui-sortable-handle:before {
+
+/* selection mode */
+
+.album-inline-panel .select-and-sort.selectable .ui-sortable-handle {
+    cursor: pointer;
+}
+
+.album-inline-panel .select-and-sort.selectable .ui-sortable-handle:before {
   left: .3em;
   top: .3em;
   color: transparent;
   font-size: 2em;
   content: '\2713';
   position: absolute;
-  
   border: 2px solid rgba(255, 255, 255, 0.8);
   border-radius: 5px;
-  
-  
   background-color: rgba(0,0,0,0.3);
-  
   z-index: 100;
 }
 
 
-.album-inline-panel .select-and-sort.selectable > .ui-sortable-handle.selected:before {
-  
+.album-inline-panel .select-and-sort.selectable .ui-sortable-handle.selected:before {
   color: white;
-  
   background-color: #235ca1;
 }
-
-.album-inline-panel .ui-sortable-handle {
-    margin: 0;
-    background-color: white;
-    box-shadow: 0 0 0.3em rgba(0,0,0,0.2);
-}
-
-.album-inline-panel .ui-sortable-handle .w-panel{
-    margin: 0;
-}
-
-.album-inline-panel .ui-sortable-handle .w-field__wrapper{
-    margin: 0;
-} 
-
-.album-inline-panel .ui-sortable-handle .w-field__input {
-    padding: 0.2em;
-}
-
-.album-inline-panel .ui-sortable-handle .w-panel__content {
-    background: none; /* remove wagtails guide-line-vertical */
-}
-
- 	
-.album-inline-panel .w-mb-4 {
-    display: flex;
-    justify-content: space-evenly;
-    padding: 1em;
-}
-
 
 .album-inline-panel .select-and-sort .ui-sortable-handle img {
     max-width: 100px;
@@ -100,6 +97,7 @@
     object-fit: cover;
 }
 
+/* decoration for the cover image handle */
 .album-inline-panel .select-and-sort:not(.selectable) .cover-image::after {
     content:'\1F4F8  Cover' !important;
     display: table-cell;
@@ -114,72 +112,85 @@
     box-sizing: border-box;
 }
 
-.album-inline-panel .select-and-sort .ui-sortable-handle {
-    margin: 0;
-    position: relative;
-}
-
-.album-inline-panel .select-and-sort .ui-sortable-handle .input {
-    width: 100px;
-    height: 100px;
-    display: inline-block;
+.album-inline-panel .select-and-sort.ui-sortable {
+    /* prevent "text" selection of images in selection mode*/
+    user-select: none;
 }
 
 .album-inline-panel .select-and-sort.ui-sortable img {
     pointer-events: none;
 }
 
-.album-inline-panel .select-and-sort.ui-sortable ul {
-    user-select: none;   
-    margin: 0;
-    height:100px;
+/* placeholder when dragging handlers around */
+.album-inline-panel .select-and-sort .ui-state-highlight {
+    /* fix for slight size-changes by redeclaring border as outline */
+    border: none;
+    outline: 1px solid rgba(255, 255, 255, 0.7);
 }
 
-.album-inline-panel .ui-state-highlight {
-    height: 100px;
-    width: 100px;
-}
-
-.album-inline-panel .ui-sortable-helper {
+/* the helper (copy of the handle) when dragging handlers around */
+.album-inline-panel .select-and-sort .ui-sortable-helper {
     box-shadow: 0 0 0.3em var(--w-color-primary);
 }
 
-#contextMenu.wagtail-photo-gallery {
-    position:absolute;
-    background-color: white;
-    z-index: 2000;
-    border: 1px solid gray;
-    border-radius: 5px;
+/* wagtail button container */
+.album-inline-panel .w-mb-4 {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 1em;
 }
 
-#contextMenu.wagtail-photo-gallery ul {
+
+#contextMenu.select-and-sort {
+    position:absolute;
+    background-color: #f4f4f4;
+    z-index: 2000;
+    border: 1px solid #ccc;
+    border-radius: 0.2em;
+    box-shadow: 0 0 0.3em rgba(0,0,0,0.2);
+    
+    /* correct cursor and text selection */
+    cursor: default;
+    user-select: none;
+}
+
+#contextMenu.select-and-sort ul {
     margin:0;
     padding: 0;
 }
 
-#contextMenu.wagtail-photo-gallery li {
+#contextMenu.select-and-sort li {
     padding:5px;
 }
 
-#contextMenu.wagtail-photo-gallery li.delete::before {
+#contextMenu.select-and-sort li:hover {
+    background-color: white;
+}
+
+#contextMenu.select-and-sort li.delete::before {
     content:'\1F5D1';
     padding-right: 0.5em;
 }
 
 
-#contextMenu.wagtail-photo-gallery li.move::before {
+#contextMenu.select-and-sort li.move::before {
     content:'\21C4';
     padding-right: 0.5em;
 }
 
 
-#contextMenu.wagtail-photo-gallery li.check::before {
+#contextMenu.select-and-sort li.check::before {
     content:'\2713';
     padding-right: 0.5em;
 }
 
 
-#contextMenu.wagtail-photo-gallery li.cover::before {
+#contextMenu.select-and-sort li.cover::before {
     content:'\1F4F8';
     padding-right: 0.5em;
+}
+
+/* hide undesired panels from wagtail */
+.hidden_panel {
+    display: none
 }

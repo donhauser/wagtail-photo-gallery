@@ -35,7 +35,7 @@ class SelectAndSort {
         this.rightClickElement;
         
         // append custom contextmenu to <body>
-        this.menu = $('<nav>', {id: 'contextMenu', 'class': 'wagtail-photo-gallery'})
+        this.menu = $('<nav>', {id: 'contextMenu', 'class': "select-and-sort"})
         .appendTo($("body"));
         
         
@@ -52,6 +52,18 @@ class SelectAndSort {
             this.sortUpdate = options["sortUpdate"];
         } else {
             this.sortUpdate = () => [];
+        }
+        
+        if(options["selectChange"]) {
+            this.selectChangeCallback = options["selectChange"];
+        } else {
+            this.selectChangeCallback = () => [];
+        }
+        
+        if(options["selectModeChange"]) {
+            this.selectModeChangeCallback = options["selectModeChange"];
+        } else {
+            this.selectModeChangeCallback = () => [];
         }
         
         if(options["delete"]) {
@@ -79,6 +91,7 @@ class SelectAndSort {
         
         this.element.sortable({
             placeholder: "ui-state-highlight",
+            forcePlaceholderSize: true,
             update: ( event, ui ) => self.sortUpdate(self, event, ui),
             start: () => clearTimeout(self.mousedown_timeout),
             tolerance: "pointer",
@@ -97,7 +110,7 @@ class SelectAndSort {
                         self.setMultiSortable(false);
                     }
                 }
-            },
+            }
         })
     }
     
@@ -147,6 +160,7 @@ class SelectAndSort {
         $(this.element.children(".selected")[0]).trigger(event);
     }
     
+    
     updateContextMenu(e) {
         // update the context menu (for different menus for different modes)
         let contextMenu;
@@ -161,29 +175,21 @@ class SelectAndSort {
         
         if(this.selectMode) {
             contextMenu = [
-                {class: "check", text: "Select All", click: () => this.element.children().addClass("selected")},
-                {class: "check", text: "Unselect All", click: () => {
-                    this.element.children().removeClass("selected");
-                    
-                    // automatically exit selectMode
-                    this.setSelectMode(false);
-                }},
+                {class: "check", text: "Unselect All", click: () => this.unselectAll()},
                 {class: "delete", text: "Delete Selected", click: () => this.deleteSelected()},
                 {class: "move", text: "Move", click: () => this.triggerMultiSort()},
                 
                 ...this.createContextMenu(this) // user defined menu
             ];
+            
+            if(!this.checkAllSelected()) {
+                contextMenu.splice(0, 0, {class: "check", text: "Select All", click: () => this.selectAll()});
+            }
+            
         } else {
             contextMenu = [
-                {
-                    class: "check", text: "Select All", click: () => {
-                        this.setSelectMode(true);
-                        this.element.children().addClass("selected");
-                    }
-                },
-                {class: "delete", text: "Delete", click: () => {
-                    this.deleteElement(this.rightClickElement);
-                }},
+                {class: "check", text: "Select All", click: () => this.selectAll()},
+                {class: "delete", text: "Delete", click: () => this.deleteElement(this.rightClickElement)},
                 {class: "cover", text: coverText, click: () => {
                     if(this.rightClickElement.hasClass("cover-image")) {
                         this.rightClickElement.removeClass("cover-image");
@@ -222,15 +228,47 @@ class SelectAndSort {
         else {
             element.sortable("enable");
         }
+        
+        this.selectModeChangeCallback(this, value)
     }
     
     
-    deleteElement(elem) {
+    selectAll() {
+        // select all images
+        
+        this.element.children().addClass("selected");
+        
+        this.setSelectMode(true);
+    }
+    
+    unselectAll() {
+        // unselect all images
+        
+        this.element.children().removeClass("selected");
+        
+        // automatically exit selectMode
+        this.setSelectMode(false);
+    }
+    
+    checkAllSelected() {
+        return this.element.children().length == this.element.children(".selected").length
+    }
+    
+    addElement(element) {
+        
+        // the new element needs to be ortable as well
+        element.addClass("ui-sortable-handle");
+        this.element.sortable('refresh');
+        this.createHandleEventListeners(element);
+    }
+    
+    
+    deleteElement(element) {
         // delete a given item
         
-        this.deleteCallback(this, elem);
+        this.deleteCallback(this, element);
         
-        $(elem).addClass("deleted")
+        $(element).addClass("deleted")
         .removeClass("selected") // to prevent bugs
         .slideUp();
     }
@@ -245,19 +283,15 @@ class SelectAndSort {
         // automatically exit selectMode
         this.setSelectMode(false);
     }
-
-    createEventListeners() {
-        // mouse interaction
+    
+    createHandleEventListeners(selector) {
         
         let self = this;
         let menu = this.menu;
         
-        // hide menu by clicking outside somewhere (like you usually expect it)
-        $(document).click(() => self.menu.hide());
+        // mouse interaction with a single handle/image
         
-        // All interactions refer to a single item
-        this.element.children()
-        .contextmenu(function(e) {  // show custom context menu (right click)
+        selector.contextmenu(function(e) {  // show custom context menu (right click)
                 self.rightClickElement = $(this);
                 self.updateContextMenu(self.rightClickElement);
                 menu.show();
@@ -272,6 +306,7 @@ class SelectAndSort {
                     // click => selecting
                     $( this ).toggleClass("selected");
                     self.selected = $( this ).hasClass("selected");
+                    self.selectChangeCallback(self, this);
                 } else {
                     // enter select mode if the mouse is hold down (like on a smartphone)
                     self.mousedown_timeout = setTimeout(() => {
@@ -283,7 +318,7 @@ class SelectAndSort {
                         
                         $( this ).toggleClass("selected");
                         self.selected = $( this ).hasClass("selected");
-                    }, 500);
+                    }, 300);
                 }
             } else if(e.buttons == 4) { // middle mouse for dragging
                 
@@ -306,6 +341,20 @@ class SelectAndSort {
                 $(this).toggleClass("selected", self.selected);
             }
         });
+    }
+
+    createEventListeners() {
+        // mouse interaction
+        
+        let self = this;
+        let menu = this.menu;
+        
+        // hide menu by clicking outside somewhere (like you usually expect it)
+        $(document).click(() => self.menu.hide());
+        
+        // All interactions refer to a single item
+        this.createHandleEventListeners(this.element.children())
+        
         
         $(document).mouseup(function(e) {
             // prevent the select mode from being entered
@@ -323,8 +372,14 @@ class SelectAndSort {
 }
 
 $(function() {
+    let button_add = $('#id_images-ADD')
+    let button_select = $('#id_images-SELECT')
+    let button_unselect = $('#id_images-UNSELECT')
+    let button_delete = $('#id_images-DELETE')
+    
+    
     // TODO do not use #id_images-FORMS !
-    var ss = new SelectAndSort(
+    var sas = new SelectAndSort(
         "#id_images-FORMS",
         {
             sortUpdate: instance => {
@@ -334,17 +389,59 @@ $(function() {
                     $('input[name$="-ORDER"]', e).val(index+1)
                 })
             },
+            selectChange: (instance, element) => {
+                button_select.prop("disabled",instance.checkAllSelected())
+            },
+            selectModeChange: (instance, value) => {
+                button_add.prop("disabled",value)
+                button_select.prop("disabled",instance.checkAllSelected())
+                button_unselect.prop("disabled",!value)
+                button_delete.prop("disabled",!value)
+            },
             delete: (instance, elem) => {
                 $('input[name$="-DELETE"]', elem).val(1);   
             }
         }
     );
     
-    $("#id_images-FORMS").parent().children(".add").click(() => $("#id_images-FORMS").children().last().find("label").click())
+    button_add.click(() => {
+        
+        var element = $("#id_images-FORMS").children().last();
+        var input_label = element.find("label");
+        
+        sas.addElement(element);
+        
+        element.find("input").get(0).addEventListener('change', (e) => {
+
+            // getting a hold of the file reference
+            var file = e.target.files[0]; 
+
+            // read the user file 
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            
+            
+            reader.onload = readerEvent => {
+                // create an image object from the upload file
+                var image = new Image();
+                
+                image.src = readerEvent.target.result;
+                
+                input_label.replaceWith(image)
+            }
+
+        })
+
+        // clicking on the label opens the file dialog
+        input_label.click();
+    })
+    button_select.click(() => sas.selectAll())
+    button_unselect.click(() => sas.unselectAll())
+    button_delete.click(() => sas.deleteSelected())
     
     
     // find the input containing the cover id and add the .cover-image class to the correct <li>
     var val = $('#id_cover').val();
     var element = $('input[name$="-id"][value="'+val+'"]')
-    element.parents("#id_images-FORMS > li").addClass("cover-image")
+    element.parents(".ui-sortable-handle").addClass("cover-image")
 });

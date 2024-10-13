@@ -1,12 +1,14 @@
-from django import forms
 
-from django import forms
-from wagtail.admin.forms import WagtailAdminModelForm
 import PIL
 import zipfile
+
 from datetime import datetime
-from django.core.files import File
+
+from django import forms
 from django.conf import settings
+from django.core.files import File
+
+from wagtail.admin.forms import WagtailAdminModelForm
 
 
 class AlbumForm(WagtailAdminModelForm):

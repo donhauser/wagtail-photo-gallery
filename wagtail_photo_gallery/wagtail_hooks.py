@@ -2,12 +2,14 @@
 from wagtail import hooks
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 
-from .models import Album
-
 from wagtail.admin.edit_handlers import FieldPanel
 
-
 from django.utils.translation import gettext as _
+from django.templatetags.static import static
+from django.utils.html import format_html
+
+from .models import Album
+
 
 @modeladmin_register
 class AlbumModelWagtailAdmin(ModelAdmin):
@@ -22,8 +24,6 @@ class AlbumModelWagtailAdmin(ModelAdmin):
     #search_fields = ('fields',)
 
 
-from django.templatetags.static import static
-from django.utils.html import format_html
 
 @hooks.register("insert_global_admin_css", order=100)
 def global_admin_css():

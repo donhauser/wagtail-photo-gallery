@@ -1,25 +1,41 @@
+
 import uuid
-from django.db import models
+import io
+import copy
+import itertools
+
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFit
 
 from django import forms
+from django.db import models
+from django.core.files.base import ContentFile
+from django.db.models.signals import pre_save, post_save
+from django.shortcuts import render
+from django.http import Http404
 
 from wagtail.admin.edit_handlers import HelpPanel, FieldPanel, ObjectList, TabbedInterface, MultiFieldPanel
 from wagtail.models import Orderable
+from wagtail.contrib.routable_page.models import RoutablePageMixin, route
+from wagtail.coreutils import resolve_model_string
+from wagtail.fields import StreamField
+
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
+from PIL import Image
 
 from .panels import AlbumInlinePanel
 from .forms import AlbumForm
 from .widgets import PictureWidget
+from .utils import image_transpose_exif
+from .blocks import GalleryBlock
 
-from wagtail.coreutils import resolve_model_string
 
 HELP_TEXT = """Grab an image and drag it around to change its position.
 Holding down the left mouse button can be used for selecting multiple images at once, which can be dragged around with the middle mouse button.
 """
+
 
 class Album(ClusterableModel):
     
@@ -57,15 +73,15 @@ class Album(ClusterableModel):
     
     panels = [
         FieldPanel('title'),
-        FieldPanel('collection'),
         FieldPanel('description'),
-        FieldPanel('zip', heading="Upload a .zip file"),
         AlbumInlinePanel('images', heading="Album Images", help_text=HELP_TEXT),
-        FieldPanel('cover', widget=forms.widgets.Input, classname="hidden_field")
+        FieldPanel('zip', heading="Upload a .zip file"),
+        FieldPanel('cover', widget=forms.widgets.Input, classname="hidden_panel")
     ]
     
     settings_panel = [
         FieldPanel('slug'),
+        FieldPanel('collection'),
         FieldPanel('is_visible'),
     ]
     
@@ -77,14 +93,6 @@ class Album(ClusterableModel):
     def __str__(self):
         return self.title
 
-import io
-import copy
-
-from .utils import image_transpose_exif
-
-from PIL import Image
-
-from django.core.files.base import ContentFile
 
 class AlbumImage(Orderable):
 
@@ -153,21 +161,10 @@ class AlbumImage(Orderable):
     
     def __str__(self):
         return self.name or str(super())
-        
-from django.db.models.signals import pre_save, post_save
+
 
 pre_save.connect(AlbumImage.preprocess_for_db, sender=AlbumImage)
 
-
-
-from .blocks import GalleryBlock
-
-from django.http import Http404
-from wagtail.contrib.routable_page.models import RoutablePageMixin, route
-
-from wagtail.fields import StreamField
-import itertools
-from django.shortcuts import render
 
 class ImageGalleryMixin(RoutablePageMixin):
     def __init__(self, *args, **kwargs):
