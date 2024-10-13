@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-13 10:55+0000\n"
+"POT-Creation-Date: 2024-10-13 11:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,8 +25,8 @@ msgid ""
 "at once, which can be dragged around with the middle mouse button."
 msgstr ""
 "Greife ein Bild und zieh es umher um seine Position zu ändern.\n"
-"Halte die linke Maustaste gedrückt um mehrere Bilder gleichzeitig "
-"auszuwählenund nutze die mittlere Maustaste um die Bilder herum zu ziehen"
+"Halte die linke Maustaste gedrückt um mehrere Bilder gleichzeitig auszuwählen "
+"und nutze die mittlere Maustaste um die Bilder herum zu ziehen"
 
 #: models.py:76
 msgid "Title"
@@ -37,10 +37,8 @@ msgid "Description"
 msgstr "Beschreibung"
 
 #: models.py:78
-#, fuzzy
-#| msgid "Add Image"
 msgid "Images"
-msgstr "Bild Hinzufügen"
+msgstr "Bilder"
 
 #: models.py:79
 msgid "Upload a .zip file"
@@ -54,17 +52,27 @@ msgstr "Inhalt"
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: models.py:161
+#: models.py:98
+#, fuzzy
+#| msgid "Albums"
+msgid "Album"
+msgstr "Alben"
+
+#: models.py:99 wagtail_hooks.py:17
+msgid "Albums"
+msgstr "Alben"
+
+#: models.py:165
 msgid "Album Image"
 msgstr "Album Bild"
 
 #: templates/wagtail_photo_gallery/admin/inline_panel.html:33
 msgid "Add Image"
-msgstr "Bild Hinzufügen"
+msgstr "Bild hinzufügen"
 
 #: templates/wagtail_photo_gallery/admin/inline_panel.html:37
 msgid "Select All"
-msgstr "Alle Auswählen"
+msgstr "Alle auswählen"
 
 #: templates/wagtail_photo_gallery/admin/inline_panel.html:41
 msgid "Unselect All"
@@ -77,10 +85,6 @@ msgstr "Auswahl löschen"
 #: views.py:10 widgets.py:20
 msgid "Choose a collection"
 msgstr "Wähle eine Sammlung"
-
-#: wagtail_hooks.py:17
-msgid "Albums"
-msgstr "Alben"
 
 #: widgets.py:16
 msgid "Click here to add an image"

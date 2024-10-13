@@ -93,6 +93,10 @@ class Album(ClusterableModel):
     
     def __str__(self):
         return self.title
+    
+    class Meta:
+         verbose_name = _('Album')
+         verbose_name_plural = _('Albums')
 
 
 class AlbumImage(Orderable):

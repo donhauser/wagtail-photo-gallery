@@ -42,7 +42,7 @@ class PictureWidget(forms.widgets.Widget):
         
         if not value:
             # fallback to a label for the image input field, as clicking on the label will then show a file-open dialog
-            html = '<label for="id_{}">{}</label>'.format(self.fallback_text, name.replace('thumb','image'))
+            html = '<label for="id_{}">{}</label>'.format(name.replace('thumb','image'), self.fallback_text)
         else:
             html = '<img src="{}"/>'.format(value.url)
         
