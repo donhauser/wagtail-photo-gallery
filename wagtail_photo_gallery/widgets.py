@@ -13,6 +13,9 @@ from wagtail.coreutils import resolve_model_string
 from generic_chooser.widgets import AdminChooser
 
 
+FALLBACK_TEXT = _("Click here to add an image")
+
+
 class CollectionChooser(AdminChooser):
     choose_one_text = _('Choose a collection')
     choose_another_text = _('Choose another collection')
@@ -30,10 +33,16 @@ class CollectionChooser(AdminChooser):
 
 
 class PictureWidget(forms.widgets.Widget):
+    
+    @property
+    def fallback_text(self):
+        return FALLBACK_TEXT
+    
     def render(self, name, value, attrs=None, **kwargs):
         
         if not value:
-            html = '<label style="display: block; width: 100%; height: 100%;" for="id_{}">Click here to add an image</label>'.format(name.replace('thumb','image'))
+            # fallback to a label for the image input field, as clicking on the label will then show a file-open dialog
+            html = '<label for="id_{}">{}</label>'.format(self.fallback_text, name.replace('thumb','image'))
         else:
             html = '<img src="{}"/>'.format(value.url)
         

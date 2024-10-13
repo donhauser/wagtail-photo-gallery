@@ -1,0 +1,95 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-10-13 10:55+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: models.py:36
+msgid ""
+"Grab an image and drag it around to change its position.\n"
+"Holding down the left mouse button can be used for selecting multiple images "
+"at once, which can be dragged around with the middle mouse button."
+msgstr ""
+"Greife ein Bild und zieh es umher um seine Position zu ändern.\n"
+"Halte die linke Maustaste gedrückt um mehrere Bilder gleichzeitig "
+"auszuwählenund nutze die mittlere Maustaste um die Bilder herum zu ziehen"
+
+#: models.py:76
+msgid "Title"
+msgstr "Titel"
+
+#: models.py:77
+msgid "Description"
+msgstr "Beschreibung"
+
+#: models.py:78
+#, fuzzy
+#| msgid "Add Image"
+msgid "Images"
+msgstr "Bild Hinzufügen"
+
+#: models.py:79
+msgid "Upload a .zip file"
+msgstr "Lade eine .zip-Datei hoch"
+
+#: models.py:90
+msgid "Content"
+msgstr "Inhalt"
+
+#: models.py:91
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: models.py:161
+msgid "Album Image"
+msgstr "Album Bild"
+
+#: templates/wagtail_photo_gallery/admin/inline_panel.html:33
+msgid "Add Image"
+msgstr "Bild Hinzufügen"
+
+#: templates/wagtail_photo_gallery/admin/inline_panel.html:37
+msgid "Select All"
+msgstr "Alle Auswählen"
+
+#: templates/wagtail_photo_gallery/admin/inline_panel.html:41
+msgid "Unselect All"
+msgstr "Auswahl aufheben"
+
+#: templates/wagtail_photo_gallery/admin/inline_panel.html:45
+msgid "Delete Selected"
+msgstr "Auswahl löschen"
+
+#: views.py:10 widgets.py:20
+msgid "Choose a collection"
+msgstr "Wähle eine Sammlung"
+
+#: wagtail_hooks.py:17
+msgid "Albums"
+msgstr "Alben"
+
+#: widgets.py:16
+msgid "Click here to add an image"
+msgstr "Klicke hier um ein Bild hinzuzufügen"
+
+#: widgets.py:21
+msgid "Choose another collection"
+msgstr "Wähle eine andere Sammlung"
+
+#: widgets.py:22
+msgid "Edit this collection"
+msgstr "Bearbeite diese Sammlung"

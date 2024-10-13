@@ -13,6 +13,7 @@ from django.core.files.base import ContentFile
 from django.db.models.signals import pre_save, post_save
 from django.shortcuts import render
 from django.http import Http404
+from django.utils.translation import gettext_lazy as _
 
 from wagtail.admin.edit_handlers import HelpPanel, FieldPanel, ObjectList, TabbedInterface, MultiFieldPanel
 from wagtail.models import Orderable
@@ -32,10 +33,10 @@ from .utils import image_transpose_exif
 from .blocks import GalleryBlock
 
 
-HELP_TEXT = """Grab an image and drag it around to change its position.
-Holding down the left mouse button can be used for selecting multiple images at once, which can be dragged around with the middle mouse button.
-"""
+HELP_TEXT = _("""Grab an image and drag it around to change its position.
+Holding down the left mouse button can be used for selecting multiple images at once, which can be dragged around with the middle mouse button.""")
 
+HIDDEN_PANEL_CLASS = "hidden_panel"
 
 class Album(ClusterableModel):
     
@@ -72,11 +73,11 @@ class Album(ClusterableModel):
         return resolve_model_string(self.image_class)
     
     panels = [
-        FieldPanel('title'),
-        FieldPanel('description'),
-        AlbumInlinePanel('images', heading="Album Images", help_text=HELP_TEXT),
-        FieldPanel('zip', heading="Upload a .zip file"),
-        FieldPanel('cover', widget=forms.widgets.Input, classname="hidden_panel")
+        FieldPanel('title', heading=_("Title")),
+        FieldPanel('description', heading=_("Description")),
+        AlbumInlinePanel('images', heading=_("Images"), help_text=HELP_TEXT),
+        FieldPanel('zip', heading=_("Upload a .zip file")),
+        FieldPanel('cover', widget=forms.widgets.Input, classname=HIDDEN_PANEL_CLASS)
     ]
     
     settings_panel = [
@@ -86,8 +87,8 @@ class Album(ClusterableModel):
     ]
     
     edit_handler = TabbedInterface([
-        ObjectList(panels, heading='Content'),
-        ObjectList(settings_panel, heading="Settings"),
+        ObjectList(panels, heading=_('Content')),
+        ObjectList(settings_panel, heading=_("Settings")),
     ])
     
     def __str__(self):
@@ -157,7 +158,7 @@ class AlbumImage(Orderable):
        
     @property
     def alt(self):
-        return "Album Image"
+        return _("Album Image")
     
     def __str__(self):
         return self.name or str(super())

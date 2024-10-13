@@ -19,19 +19,12 @@ class AlbumInlinePanel(InlinePanel):
 
 
 class AlbumMultiFieldPanel(MultiFieldPanel):
-    def get_form_options(self):
-        child_form_opts = super().get_form_options()
-        
-        print("FORM OPTS", child_form_opts)
-        
-        return child_form_opts
     
     class BoundPanel(MultiFieldPanel.BoundPanel):
         template_name = "wagtail_photo_gallery/admin/multi_field_panel.html"
         
         @cached_property
         def visible_children(self):
-            #return [child for child in self.children if child.is_shown()]
             return [child for child in self.children if child.is_shown() and (child.field_name == 'thumb' or '__prefix__' in child.prefix)]
 
         @cached_property

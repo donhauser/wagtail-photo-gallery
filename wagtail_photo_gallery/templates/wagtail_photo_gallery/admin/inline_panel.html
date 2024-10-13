@@ -15,22 +15,12 @@
 {% endif %}
 
 <div id="id_{{ self.formset.prefix }}-FORMS">
-    {% comment %}
-
-    Child elements of this div will become orderable elements. Do not place additional
-    "furniture" elements here unless you intend them to be part of the child ordering.
-
-    {% endcomment %}
-
     {% for child in self.children %}
         {% include "wagtail_photo_gallery/admin/inline_panel_child.html" %}
     {% endfor %}
 </div>
 
-<template id="NEW_id_{{ self.formset.prefix }}-EMPTY_FORM_TEMPLATE">
-    {% include "wagtail_photo_gallery/admin/inline_panel_child.html" with child=self.empty_child %}
-</template>
-
+{# TODO use template for wagtail 5.2+ #}
 <script type="text/django-form-template" id="id_{{ self.formset.prefix }}-EMPTY_FORM_TEMPLATE">
     {% escapescript %}
         {% include "wagtail_photo_gallery/admin/inline_panel_child.html" with child=self.empty_child %}
@@ -40,19 +30,19 @@
 {# Align with guiding line of the preceding child panel. #}
 <div class="w-mb-4 -w-ml-4">
     <button type="button" class="button button-small button-secondary chooser__choose-button" id="id_{{ self.formset.prefix }}-ADD">
-        {% icon name=icon|default:"plus-inverse" %}{% blocktrans trimmed with label=self.label|lower %}Add {{ label }}{% endblocktrans %}
+        {% icon name="plus-inverse" %}{% trans "Add Image" %}
     </button>
     
     <button type="button" class="button button-small button-secondary chooser__choose-button" id="id_{{ self.formset.prefix }}-SELECT">
-        {% icon name="circle-check" %}Select All
+        {% icon name="circle-check" %}{% trans "Select All" %}
     </button>
     
     <button type="button" class="button button-small button-secondary chooser__choose-button" id="id_{{ self.formset.prefix }}-UNSELECT" disabled>
-        {% icon name="circle-xmark" %}Unselect All
+        {% icon name="circle-xmark" %}{% trans "Unselect All" %}
     </button>
     
     <button type="button" class="button button-small button-secondary chooser__choose-button" id="id_{{ self.formset.prefix }}-DELETE" disabled>
-        {% icon name="bin" %}{% blocktrans trimmed with label=self.label|lower %}Delete {{ label }}{% endblocktrans %}
+        {% icon name="bin" %}{% trans "Delete Selected" %}
     </button>
 </div>
 
