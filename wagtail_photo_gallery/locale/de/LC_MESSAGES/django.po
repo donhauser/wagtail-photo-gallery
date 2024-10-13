@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-13 11:21+0000\n"
+"POT-Creation-Date: 2024-10-13 13:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,8 +25,8 @@ msgid ""
 "at once, which can be dragged around with the middle mouse button."
 msgstr ""
 "Greife ein Bild und zieh es umher um seine Position zu ändern.\n"
-"Halte die linke Maustaste gedrückt um mehrere Bilder gleichzeitig auszuwählen "
-"und nutze die mittlere Maustaste um die Bilder herum zu ziehen"
+"Halte die linke Maustaste gedrückt um mehrere Bilder gleichzeitig "
+"auszuwählen und nutze die mittlere Maustaste um die Bilder herum zu ziehen"
 
 #: models.py:76
 msgid "Title"
@@ -58,13 +58,17 @@ msgstr "Einstellungen"
 msgid "Album"
 msgstr "Alben"
 
-#: models.py:99 wagtail_hooks.py:17
+#: models.py:99 wagtail_hooks.py:15
 msgid "Albums"
 msgstr "Alben"
 
 #: models.py:165
 msgid "Album Image"
 msgstr "Album Bild"
+
+#: templates/blocks/photo_gallery.html:17
+msgid "More Images"
+msgstr "Mehr Bilder"
 
 #: templates/wagtail_photo_gallery/admin/inline_panel.html:33
 msgid "Add Image"
@@ -81,6 +85,14 @@ msgstr "Auswahl aufheben"
 #: templates/wagtail_photo_gallery/admin/inline_panel.html:45
 msgid "Delete Selected"
 msgstr "Auswahl löschen"
+
+#: templates/wagtail_photo_gallery/album_detail.html:34
+msgid "This album is temporarily unavailable"
+msgstr "Dieses Album steht gerade nicht zur Verfügung"
+
+#: templates/wagtail_photo_gallery/album_detail.html:39
+msgid "Go back"
+msgstr "Zurück"
 
 #: views.py:10 widgets.py:20
 msgid "Choose a collection"

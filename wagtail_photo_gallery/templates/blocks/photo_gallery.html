@@ -1,3 +1,5 @@
+{% load i18n l10n %}
+
 <div class="photo-gallery-container">
     {% for album in albums %}
     
@@ -12,7 +14,7 @@
             <p>{{ album.description|truncatechars:120 }}</p>
             
             <a href="{{ detail_url }}{{ album.slug }}">
-                Mehr Bilder
+                {% trans "More Images" %}
             </a>
             
         </div>
