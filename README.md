@@ -1,4 +1,4 @@
-# wagtail-image-gallery
+# Wagtail Photo Gallery
 
 With this extention you are just a few steps away from a simple photo gallery for your wagtail page.
 
