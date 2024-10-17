@@ -1,11 +1,27 @@
 from django.utils.translation import gettext_lazy as _
 
-from generic_chooser.views import ModelChooserViewSet
+from wagtail.admin.viewsets.chooser import ChooserViewSet
+from wagtail.admin.viewsets.model import ModelViewSet
+from wagtail.models import Collection
 
-from wagtail_photo_gallery.blocks import CollectionChooserBlock
+from .models import Album
 
-class CollectionChooserViewSet(ModelChooserViewSet):
+
+class CollectionChooserViewSet(ChooserViewSet):
     icon = 'folder'
-    model = CollectionChooserBlock.target_model
+    model = Collection
     page_title = _("Choose a collection")
-    per_page = 10
+
+
+class AlbumModelViewSet(ModelViewSet):
+    model = Album
+    icon = 'image'
+    menu_order = 800
+    add_to_admin_menu = True
+    copy_view_enabled = False
+    list_display = ('title', 'description', 'modified', 'created')
+    list_filter = ('collection',)
+
+
+collection_chooser_viewset = CollectionChooserViewSet("collection_chooser")
+album_model_viewset = AlbumModelViewSet("wagtail_photo_gallery/album")

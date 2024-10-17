@@ -1,12 +1,12 @@
 
 from django.utils.functional import cached_property
+
 from wagtail import blocks
-
-
+from wagtail.models import Collection
 from wagtail.coreutils import resolve_model_string
 
+from .views import collection_chooser_viewset
 
-from .widgets import CollectionChooser
 
 class CollectionChooserBlock(blocks.ChooserBlock):
     
@@ -17,14 +17,15 @@ class CollectionChooserBlock(blocks.ChooserBlock):
 
     @property
     def target_model(self):
-        return resolve_model_string('wagtailcore.Collection')
+        return Collection
         
     @cached_property
     def widget(self):
-        return CollectionChooser()
+        return collection_chooser_viewset.widget_class()
 
     class Meta:
         icon = "folder"
+
 
 class GalleryBlock(blocks.StructBlock):
     

@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'wagtail_photo_gallery',
-    'wagtail.contrib.modeladmin',
     'wagtail.contrib.routable_page',
 ]
 

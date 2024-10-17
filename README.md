@@ -25,7 +25,6 @@ If you need the fastest possible image uploading (Faster resizing) use `pillow-s
 ```py
 INSTALLED_APPS = [
     'wagtail_photo_gallery',
-    'wagtail.contrib.modeladmin',
     'wagtail.contrib.routable_page',
     'generic_chooser',
 ]

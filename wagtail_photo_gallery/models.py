@@ -30,7 +30,7 @@ from .panels import AlbumInlinePanel
 from .forms import AlbumForm
 from .widgets import PictureWidget
 from .utils import image_transpose_exif
-from .blocks import GalleryBlock
+#from .blocks import GalleryBlock
 
 
 HELP_TEXT = _("""Grab an image and drag it around to change its position.

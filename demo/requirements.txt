@@ -1,4 +1,4 @@
-Django==4
-wagtail==4.2
-wagtail-generic-chooser  # deprecated for wagtail 6
+Django==4.2
+wagtail==6.0.6 # >=6.0.2 required 
+#wagtail-generic-chooser  # deprecated for wagtail 6
 django-imagekit
