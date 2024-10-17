@@ -2,7 +2,6 @@
 import uuid
 import io
 import copy
-import itertools
 
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFit
@@ -10,16 +9,12 @@ from imagekit.processors import ResizeToFit
 from django import forms
 from django.db import models
 from django.core.files.base import ContentFile
-from django.db.models.signals import pre_save, post_save
-from django.shortcuts import render
-from django.http import Http404
+from django.db.models.signals import pre_save
 from django.utils.translation import gettext_lazy as _
 
-from wagtail.admin.panels import HelpPanel, FieldPanel, ObjectList, TabbedInterface, MultiFieldPanel
+from wagtail.admin.panels import FieldPanel, ObjectList, TabbedInterface
 from wagtail.models import Orderable
-from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.coreutils import resolve_model_string
-from wagtail.fields import StreamField
 
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
@@ -30,7 +25,6 @@ from .panels import AlbumInlinePanel
 from .forms import AlbumForm
 from .widgets import PictureWidget
 from .utils import image_transpose_exif
-#from .blocks import GalleryBlock
 
 
 HELP_TEXT = _("""Grab an image and drag it around to change its position.
@@ -169,38 +163,3 @@ class AlbumImage(Orderable):
 
 
 pre_save.connect(AlbumImage.preprocess_for_db, sender=AlbumImage)
-
-
-class ImageGalleryMixin(RoutablePageMixin):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        
-        # Get a list of all StreamFields defined in this class
-        # The getattr() is required to get concrete iterable instances
-        self._stream_fields = [getattr(self, f.name) for f in self._meta.get_fields() if isinstance(f, StreamField)]
-        
-        # Filter out GalleryBlocks from each StreamField 
-        self._gallery_blocks = [filter(lambda x: isinstance(x.block, GalleryBlock), f) for f in self._stream_fields]
-        # Flatten the result into a single list of GalleryBlocks
-        self._gallery_blocks = list(itertools.chain(*self._gallery_blocks))
-        
-    
-    @route(r'^album/(.+)/$')
-    def serve_album(self, request, slug):
-        
-        # search for the album slug in all gallery blogs
-        for gallery in self._gallery_blocks:
-            try:
-                album = gallery.block.filter_albums(gallery.value).get(slug=slug)
-                
-            except Album.DoesNotExist:
-                continue
-            
-            return render(
-                request,
-                'wagtail_photo_gallery/album_detail.html',
-                { 'page':self, 'album': album , 'images': album.images.all()}
-            )
-
-        raise Http404
-    

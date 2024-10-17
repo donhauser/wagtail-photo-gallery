@@ -6,7 +6,7 @@ from wagtail.fields import StreamField
 from wagtail.admin.panels import FieldPanel
 
 from wagtail_photo_gallery.blocks import GalleryBlock
-from wagtail_photo_gallery.models import ImageGalleryMixin
+from wagtail_photo_gallery.mixins import ImageGalleryMixin
 
 
 class HomePage(ImageGalleryMixin, Page):

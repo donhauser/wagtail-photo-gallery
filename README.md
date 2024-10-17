@@ -25,8 +25,7 @@ If you need the fastest possible image uploading (Faster resizing) use `pillow-s
 ```py
 INSTALLED_APPS = [
     'wagtail_photo_gallery',
-    'wagtail.contrib.routable_page',
-    'generic_chooser',
+    'wagtail.contrib.routable_page'
 ]
 ```
 
@@ -48,7 +47,8 @@ from wagtail.core.fields import StreamField
 
 from wagtail.admin.edit_handlers import StreamFieldPanel
 
-from wagtail_photo_gallery.models import GalleryBlock, ImageGalleryMixin
+from wagtail_photo_gallery.blocks import GalleryBlock
+from wagtail_photo_gallery.mixins import ImageGalleryMixin
 
 class YourWagtailPage(ImageGalleryMixin, Page):
     
