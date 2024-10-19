@@ -2,6 +2,7 @@
 import uuid
 import io
 import copy
+import datetime
 
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFit
@@ -12,7 +13,7 @@ from django.core.files.base import ContentFile
 from django.db.models.signals import pre_save
 from django.utils.translation import gettext_lazy as _
 
-from wagtail.admin.panels import FieldPanel, ObjectList, TabbedInterface
+from wagtail.admin.panels import FieldPanel, FieldRowPanel, ObjectList, TabbedInterface
 from wagtail.models import Orderable, get_root_collection_id
 from wagtail.coreutils import resolve_model_string
 
@@ -27,10 +28,13 @@ from .widgets import PictureWidget
 from .utils import image_transpose_exif
 
 
-HELP_TEXT = _("""Grab an image and drag it around to change its position.
+HELP_TEXT_DETAILS = _("Indicate where and when the photos were taken. If availible, the date is used for sorting.")
+
+HELP_TEXT_IMAGES = _("""Grab an image and drag it around to change its position.
 Holding down the left mouse button can be used for selecting multiple images at once, which can be dragged around with the middle mouse button.""")
 
 HIDDEN_PANEL_CLASS = "hidden_panel"
+
 
 class Album(ClusterableModel):
     
@@ -46,6 +50,9 @@ class Album(ClusterableModel):
     
     title = models.CharField(max_length=70)
     description = models.TextField(max_length=1024)
+    
+    date = models.DateField(null=True, blank=True)#default=datetime.date.today
+    place = models.CharField(null=True, blank=True, max_length=200)
     
     cover = models.OneToOneField(
         'wagtail_photo_gallery.AlbumImage',
@@ -67,8 +74,12 @@ class Album(ClusterableModel):
     
     panels = [
         FieldPanel('title', heading=_("Title")),
+        FieldRowPanel([
+            FieldPanel('date', heading=_("Date")),
+            FieldPanel('place', heading=_("Place")),
+        ], heading=_('Details'), help_text=HELP_TEXT_DETAILS),
         FieldPanel('description', heading=_("Description")),
-        AlbumInlinePanel('images', heading=_("Images"), help_text=HELP_TEXT),
+        AlbumInlinePanel('images', heading=_("Images"), help_text=HELP_TEXT_IMAGES),
         FieldPanel('zip', heading=_("Upload a .zip file")),
         FieldPanel('cover', widget=forms.widgets.Input, classname=HIDDEN_PANEL_CLASS)
     ]
