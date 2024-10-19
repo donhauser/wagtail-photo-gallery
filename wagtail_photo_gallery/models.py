@@ -16,7 +16,7 @@ from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 
 from wagtail.admin.panels import HelpPanel, FieldPanel, ObjectList, TabbedInterface, MultiFieldPanel
-from wagtail.models import Orderable
+from wagtail.models import Orderable, get_root_collection_id
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.coreutils import resolve_model_string
 from wagtail.fields import StreamField
@@ -45,9 +45,8 @@ class Album(ClusterableModel):
 
     collection = models.ForeignKey(
         'wagtailcore.Collection',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
+        default=get_root_collection_id,
+        on_delete=models.CASCADE,
         related_name='+',
     )
     

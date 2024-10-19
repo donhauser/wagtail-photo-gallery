@@ -4,6 +4,7 @@ from wagtail import blocks
 
 
 from wagtail.coreutils import resolve_model_string
+from wagtail.models import get_root_collection_id
 
 
 from .widgets import CollectionChooser
@@ -25,13 +26,14 @@ class CollectionChooserBlock(blocks.ChooserBlock):
 
     class Meta:
         icon = "folder"
+        
 
 class GalleryBlock(blocks.StructBlock):
     
     album_class = 'wagtail_photo_gallery.Album'
     
     title = blocks.CharBlock()
-    collection = CollectionChooserBlock()
+    collection = CollectionChooserBlock(default=get_root_collection_id())
     
     class Meta:
         template = 'blocks/photo_gallery.html'
