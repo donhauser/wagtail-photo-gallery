@@ -19,7 +19,7 @@ class GalleryBlock(blocks.StructBlock):
     collection = CollectionChooserBlock()
     
     class Meta:
-        template = 'blocks/photo_gallery.html'
+        template = 'wagtail_photo_gallery/blocks/photo_gallery.html'
         icon = 'image'
     
     @property
