@@ -4,11 +4,11 @@ With this extention you are just a few steps away from a simple photo gallery fo
 
 The gallery is configurable with the wagtail admin panel and is suited for large amounts of photos.
 
-The key idea of this project is to store and manage photos independently of the usual wagtail images.
-Instead all photos are assigned to albums and can be managed by a drag-and-drop sorting widget which also supports item selection for mass-dragging and deletion.
+The key idea of this package is to store and manage photos independently of the usual wagtail images.
+Instead, all photos are assigned to albums and can be managed by a drag-and-drop sorting widget (which also supports item selection for mass-dragging and deletion).
 
-A collection may be assigned to each album, which is then used to include all albums belonging to a collection in a `GalleryBlock`.
-The `GalleryBlock` can be used in wagtails `StreamField` to embed albums into your page.
+To organize your photos, a `Collection` is assigned to each album, by default the _Root_ `Collection` is used.
+Embedding the photo gallery within a `StreamField` is now done by adding a `GalleryBlock` with reference to the desired `Collection`.
 
 ## Installation
 

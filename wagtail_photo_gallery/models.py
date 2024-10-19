@@ -13,7 +13,7 @@ from django.db.models.signals import pre_save
 from django.utils.translation import gettext_lazy as _
 
 from wagtail.admin.panels import FieldPanel, ObjectList, TabbedInterface
-from wagtail.models import Orderable
+from wagtail.models import Orderable, get_root_collection_id
 from wagtail.coreutils import resolve_model_string
 
 from modelcluster.fields import ParentalKey
@@ -39,9 +39,8 @@ class Album(ClusterableModel):
 
     collection = models.ForeignKey(
         'wagtailcore.Collection',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
+        default=get_root_collection_id,
+        on_delete=models.CASCADE,
         related_name='+',
     )
     
