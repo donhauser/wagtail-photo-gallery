@@ -8,23 +8,7 @@ from wagtail.coreutils import resolve_model_string
 from .views import collection_chooser_viewset
 
 
-class CollectionChooserBlock(blocks.ChooserBlock):
-    
-    def get_form_state(self, value):
-        # this function is required for wagtail > 2.12 (because it uses 'telepath')
-        
-        return self.widget.get_value_data(value)
-
-    @property
-    def target_model(self):
-        return Collection
-        
-    @cached_property
-    def widget(self):
-        return collection_chooser_viewset.widget_class()
-
-    class Meta:
-        icon = "folder"
+CollectionChooserBlock = collection_chooser_viewset.get_block_class()
 
 
 class GalleryBlock(blocks.StructBlock):

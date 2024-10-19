@@ -115,7 +115,7 @@ class AlbumImage(Orderable):
         
         self._original_image = copy.copy(self.image)
         
-    def preprocess_for_db(instance=None, **kwargs): # TODO self?
+    def preprocess_for_db(instance=None, **kwargs):
         
         # Skip unchanged images
         if instance._original_image == instance.image:

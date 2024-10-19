@@ -10,26 +10,8 @@ from django.utils.safestring import mark_safe
 
 from wagtail.coreutils import resolve_model_string
 
-#from generic_chooser.widgets import AdminChooser
-
 
 FALLBACK_TEXT = _("Click here to add an image")
-
-"""
-class CollectionChooser(AdminChooser):
-    choose_one_text = _('Choose a collection')
-    choose_another_text = _('Choose another collection')
-    link_to_chosen_text = _('Edit this collection')
-    choose_modal_url_name = 'collection_chooser:choose'
-
-    
-    @property
-    def model(self):
-        return resolve_model_string('wagtailcore.Collection')
-
-    #def get_edit_item_url(self, item):
-    #    return reverse('wagtailsnippets:edit', args=('base', 'collection', quote(item.pk)))
-"""
 
 
 class PictureWidget(forms.widgets.Widget):
