@@ -16,7 +16,7 @@ def package_files(directory):
 
 setuptools.setup(
     name='wagtail-photo-gallery',
-    version='0.1.1',
+    version='0.2.0',
     description='An image gallery plugin for Wagtail',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -33,7 +33,7 @@ setuptools.setup(
     },
     include_package_data=True,
     python_requires=">=3.8",
-    install_requires=["wagtail>=4.1", "wagtail-generic-chooser>=0.2.1", "django-imagekit"],
+    install_requires=["wagtail>=6.0.2", "django-imagekit"],
     extras_require = {
         'pillow':["pillow"],
         'pillow-simd':["pillow-simd"],
@@ -47,12 +47,11 @@ setuptools.setup(
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Framework :: Django",
-        "Framework :: Django :: 4",
+        "Framework :: Django :: 4.2",
         "Framework :: Django :: 5.0",
         "Framework :: Django :: 5.1",
         "Framework :: Wagtail",
-        "Framework :: Wagtail :: 4",
-        "Framework :: Wagtail :: 5",
+        "Framework :: Wagtail :: 6",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: Apache Software License",
         "Programming Language :: Python :: 3",
