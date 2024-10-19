@@ -16,7 +16,7 @@ def package_files(directory):
 
 setuptools.setup(
     name='wagtail-photo-gallery',
-    version='0.1.1',
+    version='0.1.2',
     description='An image gallery plugin for Wagtail',
     long_description=long_description,
     long_description_content_type='text/markdown',
