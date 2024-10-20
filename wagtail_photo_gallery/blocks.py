@@ -27,5 +27,5 @@ class GalleryBlock(blocks.StructBlock):
     # TODO grouping = choices: by month, year, none
     
     class Meta:
-        template = 'wagtail_photo_gallery/blocks/photo_gallery.html'
+        template = 'wagtail_photo_gallery/blocks/gallery_block.html'
         icon = 'image'
