@@ -1,7 +1,19 @@
-{% load wagtail_photo_gallery %}
+{% load i18n l10n wagtail_photo_gallery %}
 
 <section class="photo-gallery-container">
-    {% for album in albums %}
-        {% include_album album %}
+
+    {% get_albums self.collection as albums %}
+    
+    {% regroup albums by date.year as albums_year %}
+    
+    {% for year in albums_year %}
+    <section class="photo-gallery-year">
+        <h3>{{ year.grouper|default:"unsorted" }}</h3>
+        {% for album in year.list reversed %}
+        
+            <h4>{{album.date}} - {{album.collection}}</h4>
+            {% include_album album %}
+        {% endfor %}
+    </section>
     {% endfor %}
 </section>

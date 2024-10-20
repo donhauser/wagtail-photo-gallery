@@ -8,7 +8,7 @@ from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.fields import StreamField
 
 from .blocks import GalleryBlock
-
+from .models import Album
 
 class ImageGalleryMixin(RoutablePageMixin):
     album_detail_template = 'wagtail_photo_gallery/pages/album_detail.html'
@@ -32,7 +32,9 @@ class ImageGalleryMixin(RoutablePageMixin):
         # search for the album slug in all gallery blogs
         for gallery in self._gallery_blocks:
             try:
-                album = gallery.block.filter_albums(gallery.value).get(slug=slug)
+                collection = gallery.value['collection']
+                
+                album = Album.filter_by_collection(collection, is_visible=True).get(slug=slug)
                 
             except Album.DoesNotExist:
                 continue

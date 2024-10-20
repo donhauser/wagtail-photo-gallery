@@ -8,6 +8,7 @@ from wagtail.models import get_root_collection_id
 
 from .views import collection_chooser_viewset
 
+
 _CollectionChooserBlock = collection_chooser_viewset.get_block_class()
 
 class CollectionChooserBlock(_CollectionChooserBlock):
@@ -22,28 +23,9 @@ class GalleryBlock(blocks.StructBlock):
     
     title = blocks.CharBlock()
     collection = CollectionChooserBlock()
+    # TODO order = ascending or descending
+    # TODO grouping = choices: by month, year, none
     
     class Meta:
         template = 'wagtail_photo_gallery/blocks/photo_gallery.html'
         icon = 'image'
-    
-    @property
-    def target_model(self):
-        return resolve_model_string(self.album_class)
-    
-    
-    def filter_albums(self, value):
-        
-        collection = value["collection"]
-        query_set = collection.get_descendants(True) # get descendants INCLUDING the node itself
-        
-        return self.target_model.objects.filter(collection__in=query_set, is_visible=True)
-    
-    
-    def get_context(self, request, *args, **kwargs):
-        
-        context = super().get_context(request, *args, **kwargs)
-        
-        context["albums"] = self.filter_albums(context["self"]).order_by('-created')
-        
-        return context

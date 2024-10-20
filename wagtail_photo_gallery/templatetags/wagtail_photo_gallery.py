@@ -30,3 +30,14 @@ def include_album_detail(context, album):
         'album': album,
         'images': album.images.all(),
     }
+
+
+@register.simple_tag(takes_context=False)
+def get_albums(collection=None):
+    
+    if collection is None:
+        albums = Album.objects.filter(is_visible=True)
+    else:
+        albums = Album.filter_by_collection(collection, is_visible=True)
+    
+    return albums.order_by('-date', '-created')

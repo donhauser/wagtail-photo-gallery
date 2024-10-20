@@ -99,6 +99,14 @@ class Album(ClusterableModel):
     def __str__(self):
         return self.title
     
+    @classmethod
+    def filter_by_collection(cls, collection, **kwargs):
+        
+        # get descendants INCLUDING the node itself
+        query_set = collection.get_descendants(True)
+        
+        return Album.objects.filter(collection__in=query_set, **kwargs)
+    
     class Meta:
         verbose_name = _('Album')
         verbose_name_plural = _('Albums')
