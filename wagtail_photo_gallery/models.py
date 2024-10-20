@@ -68,10 +68,6 @@ class Album(ClusterableModel):
     slug = models.SlugField(max_length=50, unique=True)
     
     
-    @property
-    def image_model(self):
-        return resolve_model_string(self.image_class)
-    
     panels = [
         FieldPanel('title', heading=_("Title")),
         FieldRowPanel([
@@ -95,12 +91,17 @@ class Album(ClusterableModel):
         ObjectList(settings_panel, heading=_("Settings")),
     ])
     
+    
+    @property
+    def image_model(self):
+        return resolve_model_string(self.image_class)
+    
     def __str__(self):
         return self.title
     
     class Meta:
-         verbose_name = _('Album')
-         verbose_name_plural = _('Albums')
+        verbose_name = _('Album')
+        verbose_name_plural = _('Albums')
 
 
 class AlbumImage(Orderable):

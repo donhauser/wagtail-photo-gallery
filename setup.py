@@ -30,6 +30,7 @@ setuptools.setup(
         + package_files('wagtail_photo_gallery/migrations')
         + package_files('wagtail_photo_gallery/static')
         + package_files('wagtail_photo_gallery/templates')
+        + package_files('wagtail_photo_gallery/templatetags')
     },
     include_package_data=True,
     python_requires=">=3.8",

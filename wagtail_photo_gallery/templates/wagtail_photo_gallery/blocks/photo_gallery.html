@@ -1,24 +1,7 @@
-{% load i18n l10n %}
+{% load wagtail_photo_gallery %}
 
-<div class="photo-gallery-container">
+<section class="photo-gallery-container">
     {% for album in albums %}
-    
-    <div class="photo-gallery-album-card">
-        {% if album.cover.thumb or album.images.first %}
-            <img src="{{ album.cover.thumb.url | default:album.images.first.thumb.url }}" alt="{{ album.title }}"/>
-        {% endif %}
-        
-        <div class="photo-gallery-album-description">
-        
-            <span>{{ album.title }}</span>
-            <p>{{ album.description|truncatechars:120 }}</p>
-            
-            <a href="{{ detail_url }}{{ album.slug }}">
-                {% trans "More Images" %}
-            </a>
-            
-        </div>
-    </div>
-
+        {% include_album album %}
     {% endfor %}
-</div>
+</section>

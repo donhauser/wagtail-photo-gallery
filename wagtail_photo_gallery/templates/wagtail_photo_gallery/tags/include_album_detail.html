@@ -1,0 +1,25 @@
+{% load i18n l10n %}
+
+<article class="photo-gallery-album">
+    <header>
+        <h1>{{ album.title }}</h1>
+    </header>
+    <section>
+        <p>{{ album.description }}</p>
+
+        {% if album.is_visible %}
+            <div class="photo-gallery-container">
+                {% for item in images %}
+                    <a href="javascript:pswpInit({{ forloop.counter0 }});">
+                        <img src="{{ item.thumb.url }}" alt="{{ item.alt }}" />
+                    </a>
+                {% endfor %}
+            </div>
+
+        {% else %}
+            <h3>
+            {% trans "This album is temporarily unavailable" %}.
+            </h3>
+        {% endif %}
+    </section>
+</article>

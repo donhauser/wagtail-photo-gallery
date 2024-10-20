@@ -11,6 +11,8 @@ from .blocks import GalleryBlock
 
 
 class ImageGalleryMixin(RoutablePageMixin):
+    album_detail_template = 'wagtail_photo_gallery/pages/album_detail.html'
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
@@ -35,10 +37,12 @@ class ImageGalleryMixin(RoutablePageMixin):
             except Album.DoesNotExist:
                 continue
             
+            context = {'page': self, 'album': album, 'images': album.images.all()} # images is required for extra_js
+            
             return render(
                 request,
-                'wagtail_photo_gallery/album_detail.html',
-                { 'page':self, 'album': album , 'images': album.images.all()}
+                self.album_detail_template,
+                context
             )
 
         raise Http404

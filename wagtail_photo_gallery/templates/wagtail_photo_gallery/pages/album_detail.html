@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% load i18n l10n wagtail_photo_gallery %}
+
+{% block extra_css %}
+    {% include 'wagtail_photo_gallery/extra_css.html' %}
+{% endblock %}
+
+{% block content %}
+    
+    {% include_album_detail album %}
+    
+    {% include 'wagtail_photo_gallery/includes/photo_swipe.html' %}
+    
+    <a href="{{page.url}}">
+        {% trans "Go back" %}
+    </a>
+
+{% endblock %}
+
+{% block extra_js %}
+    {% include 'wagtail_photo_gallery/extra_js.html' with images=images %}
+{% endblock %}

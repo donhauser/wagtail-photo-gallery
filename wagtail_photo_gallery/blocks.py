@@ -45,6 +45,5 @@ class GalleryBlock(blocks.StructBlock):
         context = super().get_context(request, *args, **kwargs)
         
         context["albums"] = self.filter_albums(context["self"]).order_by('-created')
-        context["detail_url"] = "album/"
         
         return context
