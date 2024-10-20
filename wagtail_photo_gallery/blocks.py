@@ -28,8 +28,6 @@ class CollectionChooserBlock(_CollectionChooserBlock):
 
 class GalleryBlock(blocks.StructBlock):
     
-    album_class = 'wagtail_photo_gallery.Album'
-    
     title = blocks.CharBlock()
     collection = CollectionChooserBlock()
     ascending = blocks.BooleanBlock(required=False)
@@ -37,7 +35,7 @@ class GalleryBlock(blocks.StructBlock):
     
     @property
     def undated_albums_heading(self):
-        return _("Undated albums")
+        return _("Undated Albums")
     
     def get_context(self, request, *args, **kwargs):
         

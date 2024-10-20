@@ -1,15 +1,12 @@
-<div class="photo-gallery-album-card">
-    {% if album.cover.thumb or album.images.first %}
-        <img src="{{ album.cover.thumb.url | default:album.images.first.thumb.url }}" alt="{{ album.title }}"/>
-    {% endif %}
-    
+<section class="photo-gallery-album-card">
     <a href="{{ detail_url }}">
+    {% if album.cover.thumb or album.images.first %}
+        <img class="photo-gallery-album-cover" src="{{ album.cover.thumb.url | default:album.images.first.thumb.url }}" alt="{{ album.title }}"/>
+    {% endif %}
         <div class="photo-gallery-album-description">
-        
-            <span>{{ album.title }}</span>
+            <h4>{{ album.title }}</h4>
             
             <p>{{ album.description|truncatechars:120 }}</p>
-            
         </div>
     </a>
-</div>
+</section>
