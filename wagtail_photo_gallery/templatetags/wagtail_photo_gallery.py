@@ -23,8 +23,8 @@ def include_album(context, album, page=None):
     }
 
 
-@register.inclusion_tag('wagtail_photo_gallery/tags/include_album_detail.html', takes_context=True)
-def include_album_detail(context, album):
+@register.inclusion_tag('wagtail_photo_gallery/tags/include_album_detail.html', takes_context=False)
+def include_album_detail(album):
     
     return {
         'album': album,
@@ -33,11 +33,16 @@ def include_album_detail(context, album):
 
 
 @register.simple_tag(takes_context=False)
-def get_albums(collection=None):
+def get_albums(collection=None, ascending=False):
     
     if collection is None:
         albums = Album.objects.filter(is_visible=True)
     else:
         albums = Album.filter_by_collection(collection, is_visible=True)
     
-    return albums.order_by('-date', '-created')
+    if ascending:
+        order = ['date', 'created']
+    else:
+        order = ['-date', '-created']
+        
+    return albums.order_by(*order)

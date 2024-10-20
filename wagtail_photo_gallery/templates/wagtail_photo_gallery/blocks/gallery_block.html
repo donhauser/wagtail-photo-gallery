@@ -2,18 +2,33 @@
 
 <section class="photo-gallery-container">
 
-    {% get_albums self.collection as albums %}
+    {% get_albums self.collection self.ascending as albums %}
     
-    {% regroup albums by date.year as albums_year %}
-    
-    {% for year in albums_year %}
-    <section class="photo-gallery-year">
-        <h3>{{ year.grouper|default:"unsorted" }}</h3>
-        {% for album in year.list reversed %}
+    {% if self.grouping %}
+        {% if self.grouping == 'year'%}
+            {% regroup albums by date.year as grouped_albums %}
+        {% elif self.grouping == 'day'%}
+            {% regroup albums by date as grouped_albums %}
+        {% endif %}
         
-            <h4>{{album.date}} - {{album.collection}}</h4>
+        {% for group in grouped_albums %}
+        <section class="photo-gallery-container-group">
+            <h3>{{ group.grouper|default:undated_albums_heading }}</h3>
+            
+            {% if self.ascending %}
+                {% for album in group.list %}
+                    {% include_album album %}
+                {% endfor %}
+            {% else %}
+                {% for album in group.list reversed %}
+                    {% include_album album %}
+                {% endfor %}
+            {% endif %}
+        </section>
+        {% endfor %}
+    {% else %}
+        {% for album in albums %}
             {% include_album album %}
         {% endfor %}
-    </section>
-    {% endfor %}
+    {% endif %}
 </section>
