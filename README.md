@@ -71,11 +71,3 @@ you need to include the following css code in your gallery page (`YourWagtailPag
 {% include 'wagtail_photo_gallery/extra_css.html' %}
 ```
 
-
-## Credits
-
-This project was initially planned as a port of [django-photo-gallery](https://github.com/VelinGeorgiev/django-photo-gallery) as the name of this addon suggests.
-Never the less, almost the entrie code is changed completely now due to incompability with wagtail and the incorporation of [django-modelcluster](https://github.com/wagtail/django-modelcluster).
-
-Contributions to this project are welcome!
-

@@ -9,12 +9,16 @@ from .views import album_model_viewset
 from .views import collection_chooser_viewset
 
 
+SELECT_AND_SORT_JS = "wagtail_photo_gallery/admin/js/select-and-sort.js"
+SELECT_AND_SORT_CSS = "wagtail_photo_gallery/admin/css/select-and-sort.css"
+
+
 @hooks.register("insert_global_admin_css", order=100)
 def global_admin_css():
     
     return format_html(
         '<link rel="stylesheet" href="{}">',
-        static("photo_gallery_admin.css")
+        static(SELECT_AND_SORT_CSS)
     )
 
 @hooks.register("insert_global_admin_js", order=100)
@@ -22,7 +26,7 @@ def global_admin_js():
     
     return format_html(
         '<script src="{}"></script>',
-        static("photo_gallery_admin.js")
+        static(SELECT_AND_SORT_JS)
     )
 
 @hooks.register("register_admin_viewset")
