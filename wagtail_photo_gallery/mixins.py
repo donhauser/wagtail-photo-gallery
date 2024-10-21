@@ -39,7 +39,7 @@ class ImageGalleryMixin(RoutablePageMixin):
             except Album.DoesNotExist:
                 continue
             
-            context = {'page': self, 'album': album, 'images': album.images.all()} # images is required for extra_js
+            context = {'page': self, 'album': album}
             
             return render(
                 request,

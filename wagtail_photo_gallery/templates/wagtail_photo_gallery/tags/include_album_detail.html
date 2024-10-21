@@ -8,11 +8,9 @@
         <p>{{ album.description }}</p>
 
         {% if album.is_visible %}
-            <div class="photo-gallery-container">
+            <div class="photo-gallery-container-images">
                 {% for item in images %}
-                    <a href="javascript:pswpInit({{ forloop.counter0 }});">
-                        <img src="{{ item.thumb.url }}" alt="{{ item.alt }}" />
-                    </a>
+                    <img src="{{ item.thumb.url }}" alt="{{ item.alt }}" data-image-src="{{ item.image.url }}" data-image-width="{{ item.width }}" data-image-height="{{ item.height }}" />
                 {% endfor %}
             </div>
         {% else %}

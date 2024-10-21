@@ -58,3 +58,27 @@ img.photo-gallery-album-cover {
     
     object-fit: cover;
 }
+
+
+/* album detail view */
+
+.photo-gallery-container-images {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    position: relative;
+    gap: 2em;
+}
+.photo-gallery-container-images img {
+    height: 10em;
+    min-width: 8em;
+    max-width: 24em;
+    
+    display: block;
+    margin: auto;
+    
+    position: relative;
+    
+    object-fit: cover;
+    cursor: pointer;
+}
