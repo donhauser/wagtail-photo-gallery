@@ -10,7 +10,9 @@
         {% if album.is_visible %}
             <div class="photo-gallery-container-images">
                 {% for item in images %}
-                    <img src="{{ item.thumb.url }}" alt="{{ item.alt }}" data-image-src="{{ item.image.url }}" data-image-width="{{ item.width }}" data-image-height="{{ item.height }}" />
+                    <a href="{{ item.image.url }}" data-pswp-src="{{ item.image.url }}" data-pswp-width="{{ item.width }}" data-pswp-height="{{ item.height }}" data-cropped="true">
+                        <img src="{{ item.thumb.url }}" alt="{{ item.alt }}"/>
+                    </a>
                 {% endfor %}
             </div>
         {% else %}
