@@ -7,6 +7,8 @@ from datetime import datetime
 from django import forms
 from django.conf import settings
 from django.core.files import File
+from django.core.exceptions import ValidationError
+from django.utils.text import slugify
 
 from wagtail.admin.forms import WagtailAdminModelForm
 
@@ -17,8 +19,12 @@ class AlbumForm(WagtailAdminModelForm):
     def save(self, commit=True):
         
         if self.is_valid():
+                
             album = super().save(commit=False)
             album.modified = datetime.now()
+            
+            if not self.cleaned_data['slug']:
+                album.slug = slugify(self.cleaned_data['title'])
             
             if self.cleaned_data['zip'] != None:
                 
@@ -46,6 +52,9 @@ class AlbumForm(WagtailAdminModelForm):
                             except PIL.UnidentifiedImageError:
                                 pass
         
-        if commit:
-            album.save()
-        return album
+            if commit:
+                album.save()
+            return album
+        
+        raise ValidationError(f"AlbumForm is invalid")
+        
