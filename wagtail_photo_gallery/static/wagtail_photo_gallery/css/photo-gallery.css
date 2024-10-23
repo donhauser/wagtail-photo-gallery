@@ -3,7 +3,6 @@
     flex-wrap: wrap;
     align-content: flex-start;
     position: relative;
-    gap: 2em;
 }
 
 .photo-gallery-container-group {
@@ -18,7 +17,9 @@
 .photo-gallery-container-group h3 {
     flex-basis: 100%;
     margin: 0;
-    flex-shrink: 0;
+    
+    width: 0; /* layout fix: removes unwanted right padding to next group*/
+    height: 0;
 }
 
 .photo-gallery-album-card {
