@@ -49,9 +49,9 @@ class Album(ClusterableModel):
     )
     
     title = models.CharField(max_length=70)
-    description = models.TextField(max_length=1024)
+    description = models.TextField(max_length=1024, blank=True)
     
-    date = models.DateField(null=True, blank=True)#default=datetime.date.today
+    date = models.DateField(null=True, blank=True)
     place = models.CharField(null=True, blank=True, max_length=200)
     
     cover = models.OneToOneField(
