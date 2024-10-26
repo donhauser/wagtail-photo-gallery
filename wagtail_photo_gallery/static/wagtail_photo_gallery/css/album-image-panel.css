@@ -1,0 +1,31 @@
+
+/* wagtail layout fixes */
+
+.album-image-panel .select-and-sort .ui-sortable-handle .w-panel {
+    margin: 0;
+}
+
+.album-image-panel .select-and-sort .ui-sortable-handle .w-field__wrapper {
+    margin: 0;
+} 
+
+.album-image-panel .select-and-sort .ui-sortable-handle .w-field__input {
+    margin: 0;
+    padding: 0.2em;
+}
+
+.album-image-panel .select-and-sort .ui-sortable-handle .w-panel__content {
+    background: none; /* remove wagtails guide-line-vertical */
+}
+
+.album-image-panel .select-and-sort .ui-sortable-handle .w-panel__wrapper:not(:first-child) {
+    display: none;
+}
+
+/* wagtail button container */
+
+.album-image-panel .w-mb-4 {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 1em;
+}

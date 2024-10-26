@@ -22,7 +22,7 @@ from modelcluster.models import ClusterableModel
 
 from PIL import Image
 
-from .panels import AlbumInlinePanel
+from .panels import AlbumImagePanel
 from .forms import AlbumForm
 from .widgets import PictureWidget
 from .utils import image_transpose_exif
@@ -75,9 +75,8 @@ class Album(ClusterableModel):
             FieldPanel('place', heading=_("Place")),
         ], heading=_('Details'), help_text=HELP_TEXT_DETAILS),
         FieldPanel('description', heading=_("Description")),
-        AlbumInlinePanel('images', heading=_("Images"), help_text=HELP_TEXT_IMAGES),
+        AlbumImagePanel('images', heading=_("Images"), help_text=HELP_TEXT_IMAGES),
         FieldPanel('zip', heading=_("Upload a .zip file")),
-        FieldPanel('cover', widget=forms.widgets.Input, classname=HIDDEN_PANEL_CLASS)
     ]
     
     settings_panel = [

@@ -1,10 +1,7 @@
 
-
-
-
-class SelectAndSort {
+export class SelectAndSort {
     /*
-     * jQuery UI select and sort widget (for images)
+     * jQuery UI select and sort widget for images
      *
      * Usage:
      *   SelectAndSort(<DOM-element>, options)
@@ -14,10 +11,18 @@ class SelectAndSort {
      *     Extend the context menu.
      *     An array consisting of objects with {class: "css-class", text: "menu entry", click: some_function} is expected.
      *   sortUpdate(callable):
-     *     This callback will be triggered when the sorting changes.
+     *     Triggered when the sorting changes
+     *   selectChange(callable):
+     *     Triggered when the current selection changes
+     *   selectModeChange(callable):
+     *     Triggered when the selection mode is toggled on/off
+     *   delete(callable):
+     *     Triggered when an image is deleted
+     *   coverChange(callable):
+     *     Triggered when another image is set as cover
      *    
      *  Copyright:
-     *   Jonas Donhauser - 2021
+     *   Jonas Donhauser - 2021 - 2024
      */
 
     constructor(element, options) {
@@ -35,7 +40,7 @@ class SelectAndSort {
         this.rightClickElement;
         
         // append custom contextmenu to <body>
-        this.menu = $('<nav>', {id: 'contextMenu', 'class': "select-and-sort"})
+        this.menu = $('<nav>', {'class': "select-and-sort-menu"})
         .appendTo($("body"));
         
         
@@ -70,6 +75,12 @@ class SelectAndSort {
             this.deleteCallback = options["delete"];
         } else {
             this.deleteCallback = () => [];
+        }
+        
+        if(options["coverChange"]) {
+            this.coverChangeCallback = options["coverChange"];
+        } else {
+            this.coverChangeCallback = () => [];
         }
         
         this.setSelectMode(false);
@@ -193,15 +204,13 @@ class SelectAndSort {
                 {class: "cover", text: coverText, click: () => {
                     if(this.rightClickElement.hasClass("cover-image")) {
                         this.rightClickElement.removeClass("cover-image");
-                        $("#id_cover").val();
+                        this.coverChangeCallback();
                     } else {
-                        // lookup the django id of the clicked element and put it in the <input> field
-                        let new_cover = $('input[name$="-id"]', this.rightClickElement).val();
-                        $("#id_cover").val(new_cover);
-
                         // update css classes
                         $(".cover-image").removeClass("cover-image");
                         this.rightClickElement.addClass("cover-image");
+                        
+                        this.coverChangeCallback(this.rightClickElement);
                     }
                 }},
                 ...this.createContextMenu(this) // user defined menu
@@ -370,78 +379,3 @@ class SelectAndSort {
         });
     }
 }
-
-$(function() {
-    let button_add = $('#id_images-ADD')
-    let button_select = $('#id_images-SELECT')
-    let button_unselect = $('#id_images-UNSELECT')
-    let button_delete = $('#id_images-DELETE')
-    
-    
-    // TODO do not use #id_images-FORMS !
-    var sas = new SelectAndSort(
-        "#id_images-FORMS",
-        {
-            sortUpdate: instance => {
-                
-                // update all orders according to new sorting
-                instance.element.children().each((index, e) => {
-                    $('input[name$="-ORDER"]', e).val(index+1)
-                })
-            },
-            selectChange: (instance, element) => {
-                button_select.prop("disabled",instance.checkAllSelected())
-            },
-            selectModeChange: (instance, value) => {
-                button_add.prop("disabled",value)
-                button_select.prop("disabled",instance.checkAllSelected())
-                button_unselect.prop("disabled",!value)
-                button_delete.prop("disabled",!value)
-            },
-            delete: (instance, elem) => {
-                $('input[name$="-DELETE"]', elem).val(1);   
-            }
-        }
-    );
-    
-    button_add.click(() => {
-        
-        var element = $("#id_images-FORMS").children().last();
-        var input_label = element.find("label");
-        
-        sas.addElement(element);
-        
-        element.find("input").get(0).addEventListener('change', (e) => {
-
-            // getting a hold of the file reference
-            var file = e.target.files[0]; 
-
-            // read the user file 
-            var reader = new FileReader();
-            reader.readAsDataURL(file);
-            
-            
-            reader.onload = readerEvent => {
-                // create an image object from the upload file
-                var image = new Image();
-                
-                image.src = readerEvent.target.result;
-                
-                input_label.replaceWith(image)
-            }
-
-        })
-
-        // clicking on the label opens the file dialog
-        input_label.click();
-    })
-    button_select.click(() => sas.selectAll())
-    button_unselect.click(() => sas.unselectAll())
-    button_delete.click(() => sas.deleteSelected())
-    
-    
-    // find the input containing the cover id and add the .cover-image class to the correct <li>
-    var val = $('#id_cover').val();
-    var element = $('input[name$="-id"][value="'+val+'"]')
-    element.parents(".ui-sortable-handle").addClass("cover-image")
-});

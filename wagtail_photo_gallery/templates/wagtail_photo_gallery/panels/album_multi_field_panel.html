@@ -4,5 +4,5 @@
     {% help_block status="info" %}{{ self.help_text }}{% endhelp_block %}
 {% endif %}
 {% for child in self.visible_children %}
-    {% include "wagtail_photo_gallery/admin/multi_field_panel_child.html" %}
+    {% include "wagtail_photo_gallery/panels/album_multi_field_panel_child.html" %}
 {% endfor %}

@@ -16,12 +16,12 @@
 
 <div id="id_{{ self.formset.prefix }}-FORMS">
     {% for child in self.children %}
-        {% include "wagtail_photo_gallery/admin/inline_panel_child.html" %}
+        {% include "wagtail_photo_gallery/panels/album_image_panel_child.html" %}
     {% endfor %}
 </div>
 
 <template id="id_{{ self.formset.prefix }}-EMPTY_FORM_TEMPLATE">
-    {% include "wagtail_photo_gallery/admin/inline_panel_child.html" with child=self.empty_child %}
+    {% include "wagtail_photo_gallery/panels/album_image_panel_child.html" with child=self.empty_child %}
 </template>
 
 {# Align with guiding line of the preceding child panel. #}
@@ -42,6 +42,8 @@
         {% icon name="bin" %}{% trans "Delete Selected" %}
     </button>
 </div>
+
+{{ self.form.cover }}
 
 {% block js_init %}
     <script>
