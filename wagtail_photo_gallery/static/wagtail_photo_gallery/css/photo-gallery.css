@@ -3,6 +3,7 @@
     flex-wrap: wrap;
     align-content: flex-start;
     position: relative;
+    gap: 2em 0;
 }
 
 .photo-gallery-container-group {

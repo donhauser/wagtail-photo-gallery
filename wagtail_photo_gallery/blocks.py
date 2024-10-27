@@ -17,6 +17,12 @@ GROUPING_CHOICES = [
         ('day', _('Day')),
     ]
 
+GALLERY_BLOCK_HELP_TEXTS = {
+    'title': _("Display name of this gallery"),
+    'collection': _("The gallery will show every album that belongs to the selected collection (and its descendants)"),
+    'grouping': _("Organize the albums by date based grouping"),
+    'ascending': _("Sort the album grouping in ascending order"),
+}
 
 _CollectionChooserBlock = collection_chooser_viewset.get_block_class()
 
@@ -28,10 +34,10 @@ class CollectionChooserBlock(_CollectionChooserBlock):
 
 class GalleryBlock(blocks.StructBlock):
     
-    title = blocks.CharBlock()
-    collection = CollectionChooserBlock()
-    ascending = blocks.BooleanBlock(required=False)
-    grouping = blocks.ChoiceBlock(choices=GROUPING_CHOICES, default='year', required=False)
+    title = blocks.CharBlock(help_text=GALLERY_BLOCK_HELP_TEXTS['title'])
+    collection = CollectionChooserBlock(help_text=GALLERY_BLOCK_HELP_TEXTS['collection'])
+    grouping = blocks.ChoiceBlock(choices=GROUPING_CHOICES, default='year', required=False, help_text=GALLERY_BLOCK_HELP_TEXTS['grouping'])
+    ascending = blocks.BooleanBlock(required=False, help_text=GALLERY_BLOCK_HELP_TEXTS['ascending'])
     
     @property
     def undated_albums_heading(self):

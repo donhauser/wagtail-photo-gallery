@@ -11,6 +11,7 @@ from django import forms
 from django.db import models
 from django.core.files.base import ContentFile
 from django.db.models.signals import pre_save
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from wagtail.admin.panels import FieldPanel, FieldRowPanel, ObjectList, TabbedInterface
@@ -28,10 +29,22 @@ from .widgets import PictureWidget
 from .utils import image_transpose_exif
 
 
-HELP_TEXT_DETAILS = _("Indicate where and when the photos were taken. If availible, the date is used for sorting.")
+HELP_TEXT_DETAILS = _("Indicate where and when the photos were taken. If availible, the date is used for sorting")
 
 HELP_TEXT_IMAGES = _("""Grab an image and drag it around to change its position.
 Holding down the left mouse button can be used for selecting multiple images at once, which can be dragged around with the middle mouse button.""")
+
+ALBUM_FIELD_HELP_TEXTS = {
+    'title': _("Display name of the album"),
+    'date': _("When were the photos taken?"),
+    'place': _("Which place can be seen on the photos?"),
+    'description': _("Tell a short story about this album"),
+    'image': HELP_TEXT_IMAGES,
+    'zip': _("Bulk upload many images as .zip file. The images will be added to the album upon saving"),
+    'slug': _("The slug of the album as it will appear in URLs e.g http://domain.com/album/[my-slug]/"),
+    'collection': _("Specify to which collection the album belongs to"),
+    'is_visible': _("Turn off the album's visibility to hide the album from your page"),
+}
 
 HIDDEN_PANEL_CLASS = "hidden_panel"
 
@@ -69,24 +82,28 @@ class Album(ClusterableModel):
     
     
     panels = [
-        FieldPanel('title', heading=_("Title")),
+        FieldPanel('title', heading=_("Title"), help_text=ALBUM_FIELD_HELP_TEXTS['title']),
         FieldRowPanel([
-            FieldPanel('date', heading=_("Date")),
-            FieldPanel('place', heading=_("Place")),
+            FieldPanel('date', heading=_("Date"), help_text=ALBUM_FIELD_HELP_TEXTS['date']),
+            FieldPanel('place', heading=_("Place"), help_text=ALBUM_FIELD_HELP_TEXTS['place']),
         ], heading=_('Details'), help_text=HELP_TEXT_DETAILS),
-        FieldPanel('description', heading=_("Description")),
+        FieldPanel('description', heading=_("Description"), help_text=ALBUM_FIELD_HELP_TEXTS['description']),
+    ]
+    
+    image_panels = [
         AlbumImagePanel('images', heading=_("Images"), help_text=HELP_TEXT_IMAGES),
-        FieldPanel('zip', heading=_("Upload a .zip file")),
+        FieldPanel('zip', heading=_("Upload a .zip file"), help_text=ALBUM_FIELD_HELP_TEXTS['zip']),
     ]
     
     settings_panel = [
-        FieldPanel('slug'),
-        FieldPanel('collection'),
-        FieldPanel('is_visible'),
+        FieldPanel('slug', help_text=ALBUM_FIELD_HELP_TEXTS['slug']),
+        FieldPanel('collection', help_text=ALBUM_FIELD_HELP_TEXTS['collection']),
+        FieldPanel('is_visible', help_text=ALBUM_FIELD_HELP_TEXTS['is_visible']),
     ]
     
     edit_handler = TabbedInterface([
         ObjectList(panels, heading=_('Content')),
+        ObjectList(image_panels, heading=_('Images')),
         ObjectList(settings_panel, heading=_("Settings")),
     ])
     
@@ -94,6 +111,19 @@ class Album(ClusterableModel):
     @property
     def image_model(self):
         return resolve_model_string(self.image_class)
+    
+    @property
+    def album_cover(self):
+        try:
+            return mark_safe(f'<img src="{self.cover.thumb.url}" style="height: 2em; width: 2em;">')
+        except:
+            pass
+        
+        return ""
+    
+    @property
+    def album_images(self):
+        return self.images.all().count()
     
     def __str__(self):
         return self.title

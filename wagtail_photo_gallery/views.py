@@ -19,8 +19,9 @@ class AlbumModelViewSet(ModelViewSet):
     menu_order = 800
     add_to_admin_menu = True
     copy_view_enabled = False
-    list_display = ('title', 'description', 'modified', 'created')
-    list_filter = ('collection',)
+    list_display = ('title', 'date', 'place', 'album_cover', 'album_images', 'modified')
+    list_filter = ('collection', 'is_visible') #'date', 'place', 'modified', 'created'
+    search_fields = ('title', 'date', 'place')
 
 
 collection_chooser_viewset = CollectionChooserViewSet("collection_chooser")

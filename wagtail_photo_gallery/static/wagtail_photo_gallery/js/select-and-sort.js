@@ -266,7 +266,7 @@ export class SelectAndSort {
     addElement(element) {
         
         // the new element needs to be ortable as well
-        element.addClass("ui-sortable-handle");
+        $(element).addClass("ui-sortable-handle");
         this.element.sortable('refresh');
         this.createHandleEventListeners(element);
     }
@@ -300,7 +300,7 @@ export class SelectAndSort {
         
         // mouse interaction with a single handle/image
         
-        selector.contextmenu(function(e) {  // show custom context menu (right click)
+        $(selector).contextmenu(function(e) {  // show custom context menu (right click)
                 self.rightClickElement = $(this);
                 self.updateContextMenu(self.rightClickElement);
                 menu.show();
