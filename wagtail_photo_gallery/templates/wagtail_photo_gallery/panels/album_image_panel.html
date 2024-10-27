@@ -14,7 +14,7 @@
     {% help_block status="info" %}{{ self.help_text }}{% endhelp_block %}
 {% endif %}
 
-<div id="id_{{ self.formset.prefix }}-FORMS">
+<div id="id_{{ self.formset.prefix }}-FORMS" data-empty-text="{% trans 'Choose image files or drag them here' %}">
     {% for child in self.children %}
         {% include "wagtail_photo_gallery/panels/album_image_panel_child.html" %}
     {% endfor %}

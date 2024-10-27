@@ -76,57 +76,74 @@ class AlbumImagePanelHandler {
             }
         );
         
-        this.initializeCover();
+        this.initializeCover(event.target);
+        this.initializeDragAndDrop(event.target);
         
-        this.addButton.click(() => this.addImages())
+        this.addButton.click(() => this.showImageFileChooser())
         this.selectButton.click(() => this.sas.selectAll())
         this.unselectButton.click(() => this.sas.unselectAll())
         this.deleteButton.click(() => this.sas.deleteSelected())
     }
     
-    initializeCover() {
+    initializeCover(target) {
         // find the input containing the cover id and add the .cover-image class to the correct <li>
         let value = this.coverField.val();
-        // TODO find within sas.element
-        let inputField = $('input[name$="-id"][value="'+value+'"]')
+        let inputField = $(target).find('input[name$="-id"][value="'+value+'"]')
         
         inputField.parents(".ui-sortable-handle").addClass("cover-image")
     }
     
-    addImages() {
+    initializeDragAndDrop(target) {
+        target.ondrop = (e) => {$(target).removeClass("drag-highlight drag-highlight-hover"); this.dropHandler(e)}
+        target.ondragover = (e) => {e.preventDefault(); $(target).addClass("drag-highlight-hover")};
+        target.ondragleave = (e) => $(target).removeClass("drag-highlight-hover");
+        
+        $(window).on('dragover', (e) => {$(target).addClass("drag-highlight")});
+        $(window).on('dragleave', (e) => {$(target).removeClass("drag-highlight")});
+    }
+    
+    async addImages(files) {
+        // iterate over the user selected upload files
+        for (const file of files) {
+            
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            
+            let imageTag = await new Promise(resolve => reader.onload = (readerEvent) => {
+                let image = new Image();
+                image.src = readerEvent.target.result;
+                image.onload = () => resolve(image);
+            });
+            
+            // wait until the formset child was added by the InlinePanel
+            let formsetAddedEvent = (await this.formsetAdded.next()).value
+            let target = formsetAddedEvent.target;
+            
+            let dataTransfer = new DataTransfer();
+            let imageInput = $(`#${formsetAddedEvent.detail.formsetPrefix}-${formsetAddedEvent.detail.formIndex}-image`).get(0)
+            
+            dataTransfer.items.add(file);
+            imageInput.files = dataTransfer.files
+            
+            $(target).find('label').replaceWith(imageTag)
+            
+            this.sas.addElement(target);
+        }
+    }
+    
+    showImageFileChooser() {
         let fileInput = $('<input type="file" multiple="multiple"/>');
         
-        fileInput.get(0).addEventListener('change', async (inputEvent) => {
-
-            // iterate over the user selected upload files
-            for (const file of inputEvent.target.files) {
-                
-                let reader = new FileReader();
-                reader.readAsDataURL(file);
-                
-                let imageTag = await new Promise(resolve => reader.onload = (readerEvent) => {
-                    let image = new Image();
-                    image.src = readerEvent.target.result;
-                    image.onload = () => resolve(image);
-                });
-                
-                // wait until the formset child was added by the InlinePanel
-                let formsetAddedEvent = (await this.formsetAdded.next()).value
-                let target = formsetAddedEvent.target;
-                
-                let dataTransfer = new DataTransfer();
-                let imageInput = $(`#${formsetAddedEvent.detail.formsetPrefix}-${formsetAddedEvent.detail.formIndex}-image`).get(0)
-                
-                dataTransfer.items.add(file);
-                imageInput.files = dataTransfer.files
-                
-                $(target).find('label').replaceWith(imageTag)
-                
-                this.sas.addElement(target);
-            }
-
-        });
+        fileInput.get(0).addEventListener('change', (inputEvent) => this.addImages(inputEvent.target.files));
         
         fileInput.click();
+        
+    }
+    
+    dropHandler(ev) {
+        // Prevent file from being opened
+        ev.preventDefault();
+        
+        this.addImages(ev.dataTransfer.files)
     }
 }

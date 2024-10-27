@@ -1,3 +1,52 @@
+/* adaption to wagtail color scheme */
+
+.album-image-panel .select-and-sort {
+    background-color: #f6f6f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+    
+    transition: background 100ms, border 100ms, color 100ms;
+}
+
+/* drag-and-drop layout & fallback content when empty */
+
+.album-image-panel .select-and-sort:not(:has(.ui-sortable-handle:not(.deleted))) {
+    min-height: 15em;
+}
+
+.album-image-panel .select-and-sort:not(:has(.ui-sortable-handle:not(.deleted)))::before {
+    content: '\002B8B'; /* downwards arrow */
+    font-size: 10em;
+    opacity: 0.1;
+    flex-basis: 100%;
+    text-align: center;
+}
+
+.album-image-panel .select-and-sort:not(:has(.ui-sortable-handle:not(.deleted)))::after {
+    content: attr(data-empty-text, '');
+    color: #5c5c5c;
+}
+
+.album-image-panel .select-and-sort.drag-highlight {
+    color: #007d7e;
+    border-color: #929292;
+}
+
+.album-image-panel .select-and-sort.drag-highlight-hover {
+    background-color: white;
+    border-color: #5c5c5c;
+    color: #007d7e;
+}
+
+.album-image-panel .select-and-sort.drag-highlight-hover:not(:has(.ui-sortable-handle:not(.deleted)))::before {
+    content: '\002B89'; /* upwards arrow */
+    opacity: 0.2;
+}
+
+.album-image-panel .select-and-sort.drag-highlight-hover:has(.ui-sortable-handle:not(.deleted))::after {
+    font-size: 5em;
+    content: '+';
+}
 
 /* wagtail layout fixes */
 
