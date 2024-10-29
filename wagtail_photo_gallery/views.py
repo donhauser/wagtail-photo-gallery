@@ -8,12 +8,20 @@ from .models import Album
 
 
 class CollectionChooserViewSet(ChooserViewSet):
+    """
+    ChooserViewSet for wagtail collections
+    """
+    
     icon = 'folder'
     model = Collection
     page_title = _("Choose a collection")
 
 
 class AlbumModelViewSet(ModelViewSet):
+    """
+    ModelViewSet for Album management
+    """
+    
     model = Album
     icon = 'image'
     menu_order = 800

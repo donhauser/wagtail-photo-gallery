@@ -11,11 +11,11 @@ from .views import collection_chooser_viewset
 
 
 GROUPING_CHOICES = [
-        (None, _('Ungrouped')),
-        ('year', _('Year')),
-        #('month', 'Month'), # not implemented yet
-        ('day', _('Day')),
-    ]
+    (None, _('Ungrouped')),
+    ('year', _('Year')),
+    #('month', 'Month'), # not implemented yet
+    ('day', _('Day')),
+]
 
 GALLERY_BLOCK_HELP_TEXTS = {
     'title': _("Display name of this gallery"),
@@ -27,12 +27,20 @@ GALLERY_BLOCK_HELP_TEXTS = {
 _CollectionChooserBlock = collection_chooser_viewset.get_block_class()
 
 class CollectionChooserBlock(_CollectionChooserBlock):
+    """
+    ChooserBlock for wagtail.Collection
+    
+    Defaults to the root collection.
+    """
     
     class Meta:
         default=get_root_collection_id()
 
 
 class GalleryBlock(blocks.StructBlock):
+    """
+    Block for embedding every album that belongs to the specified collection (and its descendants)
+    """
     
     title = blocks.CharBlock(help_text=GALLERY_BLOCK_HELP_TEXTS['title'])
     collection = CollectionChooserBlock(help_text=GALLERY_BLOCK_HELP_TEXTS['collection'])
@@ -41,9 +49,16 @@ class GalleryBlock(blocks.StructBlock):
     
     @property
     def undated_albums_heading(self):
+        """
+        Fallback heading for albums without a specified date
+        """
+        
         return _("Undated Albums")
     
     def get_context(self, request, *args, **kwargs):
+        """
+        Get the context of the StructBlock and set 'undated_albums_heading'
+        """
         
         context = super().get_context(request, *args, **kwargs)
         

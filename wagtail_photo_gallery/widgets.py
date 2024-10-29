@@ -14,13 +14,19 @@ from wagtail.coreutils import resolve_model_string
 FALLBACK_TEXT = _("Click here to add an image")
 
 
-class PictureWidget(forms.widgets.Widget):
+class ThumbnailWidget(forms.widgets.Widget):
+    """
+    Widget for image thumbnails
+    """
     
     @property
     def fallback_text(self):
         return FALLBACK_TEXT
     
     def render(self, name, value, attrs=None, **kwargs):
+        """
+        Render the thumbnail as <img> or return a <label> targeting the associated image input
+        """
         
         if not value:
             # fallback to a label for the image input field, as clicking on the label will then show a file-open dialog

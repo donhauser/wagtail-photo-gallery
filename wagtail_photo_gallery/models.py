@@ -3,12 +3,14 @@ import uuid
 import io
 import copy
 import datetime
+import pathlib
 
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFit
 
 from django import forms
 from django.db import models
+from django.conf import settings
 from django.core.files.base import ContentFile
 from django.db.models.signals import pre_save
 from django.utils.safestring import mark_safe
@@ -25,7 +27,7 @@ from PIL import Image
 
 from .panels import AlbumImagePanel
 from .forms import AlbumForm
-from .widgets import PictureWidget
+from .widgets import ThumbnailWidget
 from .utils import image_transpose_exif
 
 
@@ -46,10 +48,39 @@ ALBUM_FIELD_HELP_TEXTS = {
     'is_visible': _("Turn off the album's visibility to hide the album from your page"),
 }
 
-HIDDEN_PANEL_CLASS = "hidden_panel"
+
+WAGTAIL_IMAGE_GALLERY_UPLOAD_TO = getattr(settings, 'WAGTAIL_IMAGE_GALLERY_UPLOAD_TO', 'albums')
+WAGTAIL_IMAGE_GALLERY_IMAGE_QUALITY = getattr(settings, 'WAGTAIL_IMAGE_GALLERY_IMAGE_QUALITY', 80)
+WAGTAIL_IMAGE_GALLERY_THUMBNAIL_QUALITY = getattr(settings, 'WAGTAIL_IMAGE_GALLERY_THUMBNAIL_QUALITY', 80)
+WAGTAIL_IMAGE_GALLERY_IMAGE_SIZE_LIMIT = getattr(settings, 'WAGTAIL_IMAGE_GALLERY_IMAGE_SIZE_LIMIT', (1920, 1920))
+WAGTAIL_IMAGE_GALLERY_THUMBNAIL_SIZE_LIMIT = getattr(settings, 'WAGTAIL_IMAGE_GALLERY_THUMBNAIL_SIZE_LIMIT', (300, 300))
+
+
+def image_upload_to(instance, filename):
+    """
+    Customizable image upload path for FileField/ImageField
+
+    See:
+        https://docs.djangoproject.com/en/5.1/ref/models/fields/#django.db.models.FileField.upload_to
+    """
+    
+    return pathlib.Path(WAGTAIL_IMAGE_GALLERY_UPLOAD_TO) / filename
+
+def thumb_upload_to(instance, filename):
+    """
+    Customizable thumbnail upload path for FileField/ImageField
+
+    See:
+        https://docs.djangoproject.com/en/5.1/ref/models/fields/#django.db.models.FileField.upload_to
+    """
+    
+    return pathlib.Path(WAGTAIL_IMAGE_GALLERY_UPLOAD_TO) / filename
 
 
 class Album(ClusterableModel):
+    """
+    A collection of images with various information on the referenced images
+    """
     
     base_form_class = AlbumForm
     image_class = 'wagtail_photo_gallery.AlbumImage'
@@ -114,6 +145,10 @@ class Album(ClusterableModel):
     
     @property
     def album_cover(self):
+        """
+        Render the cover image as thumbnail preview
+        """
+        
         try:
             return mark_safe(f'<img src="{self.cover.thumb.url}" style="height: 2em; width: 2em;">')
         except:
@@ -123,6 +158,9 @@ class Album(ClusterableModel):
     
     @property
     def album_images(self):
+        """
+        Total amount of images in the album
+        """
         return self.images.all().count()
     
     def __str__(self):
@@ -130,6 +168,9 @@ class Album(ClusterableModel):
     
     @classmethod
     def filter_by_collection(cls, collection, **kwargs):
+        """
+        Query every Album that belongs to a collection or is a descendant
+        """
         
         # get descendants INCLUDING the node itself
         query_set = collection.get_descendants(True)
@@ -142,11 +183,33 @@ class Album(ClusterableModel):
 
 
 class AlbumImage(Orderable):
+    """
+    Storage optimized album image with pre-computed thumbnail
+    
+    JPEG, with a default quality of 80%, is used to store the image and its thumbnail as ProcessedImageField.
+    The filename and resized image shape are stored separately.
+    Each image gets a slug (default: random uuid) as non-guessable identification
+    """
 
     name = models.CharField(max_length=255, default=None, null=True)
     
-    image = ProcessedImageField(upload_to='albums', processors=[ResizeToFit(1920, 1920)], format='JPEG', options={'quality': 80})
-    thumb = ProcessedImageField(upload_to='albums', processors=[ResizeToFit(300, 300)], format='JPEG', options={'quality': 80}, blank=True)
+    # compressed image
+    image = ProcessedImageField(
+        upload_to=image_upload_to,
+        processors=[ResizeToFit(*WAGTAIL_IMAGE_GALLERY_IMAGE_SIZE_LIMIT)],
+        format='JPEG',
+        options={'quality': WAGTAIL_IMAGE_GALLERY_IMAGE_QUALITY}
+    )
+    
+    # low resolution thumbnail for the image
+    thumb = ProcessedImageField(
+        upload_to=thumb_upload_to,
+        processors=[ResizeToFit(*WAGTAIL_IMAGE_GALLERY_THUMBNAIL_SIZE_LIMIT)],
+        format='JPEG',
+        options={'quality': WAGTAIL_IMAGE_GALLERY_THUMBNAIL_QUALITY},
+        blank=True
+    )
+    
     album = ParentalKey('Album', on_delete=models.CASCADE, related_name='images')
     created = models.DateTimeField(auto_now_add=True)
     width = models.IntegerField(default=0)
@@ -154,7 +217,7 @@ class AlbumImage(Orderable):
     slug = models.SlugField(max_length=70, default=uuid.uuid4, editable=False)
     
     panels = [
-        FieldPanel('thumb', widget=PictureWidget),
+        FieldPanel('thumb', widget=ThumbnailWidget),
         FieldPanel('image'),
     ]
     
@@ -162,8 +225,16 @@ class AlbumImage(Orderable):
         super().__init__(*args, **kwargs)
         
         self._original_image = copy.copy(self.image)
-        
+    
+    @staticmethod
     def preprocess_for_db(instance=None, **kwargs):
+        """
+        Resizes and processes the image prior to saving
+    
+        Before an uploaded image is ready for saving, several things needs to be changed:
+        The image is converted to limited resolution JPEG with correctly applied Exif-rotation.
+        Both, the image and its thumbnail are then saved with a random uuid filename under the specified folder
+        """
         
         # Skip unchanged images
         if instance._original_image == instance.image:
@@ -180,7 +251,7 @@ class AlbumImage(Orderable):
                 image = image_transpose_exif(image)
                     
                 # This needs to be after the exif fix
-                processor = ResizeToFit(1920, 1920)
+                processor = ResizeToFit(*WAGTAIL_IMAGE_GALLERY_IMAGE_SIZE_LIMIT)
                 image = processor.process(image)
                 
                 # JPEG does not support alpha
@@ -188,7 +259,7 @@ class AlbumImage(Orderable):
                 
                 # Image to byte stream
                 imgByteArr = io.BytesIO()
-                image.save(imgByteArr, format='JPEG', quality=80)
+                image.save(imgByteArr, format='JPEG', quality=WAGTAIL_IMAGE_GALLERY_IMAGE_QUALITY)
                 
                 # Dummy file for image fields
                 contentfile = ContentFile(imgByteArr.getvalue())

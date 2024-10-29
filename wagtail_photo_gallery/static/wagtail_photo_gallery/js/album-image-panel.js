@@ -1,10 +1,14 @@
 
 let lazySasModule = import("./select-and-sort.js")
 
+// awaitable 'w-formset:ready' event
 let formsetReadyPromise = new Promise(resolve => {
     document.addEventListener('w-formset:ready', (event) => resolve(event), {once: true});
 })
 
+/**
+ * Generator for awaitable 'w-formset:added' events
+ */
 async function* formsetAddedPromiseGenerator(panel) {
     
     while(true) {
@@ -21,11 +25,15 @@ async function* formsetAddedPromiseGenerator(panel) {
 /**
  * This handler manages the interaction with the InlinePanel
  * 
- * As of oct 2024, it was not possible to simply inherit from InlinePanel.
+ * As of Oct 2024, it was not possible to simply inherit from InlinePanel.
  * Thus, the interaction is provided by the two events 'w-formset:ready' and 'w-formset:added',
  * which are wrapped with async/await
  */
 class AlbumImagePanelHandler {
+    
+    /**
+     * Takes InlinePanel and a set of options, specifying the cover field and the buttons
+     */
     constructor(panel, options) {
         this.panel = panel
         
@@ -39,6 +47,9 @@ class AlbumImagePanelHandler {
         this.formsetAdded = formsetAddedPromiseGenerator(this.panel);
     }
     
+    /**
+     * Initialize Select-and-Sort (SaS) for the InlinePanel and add required event listeners
+     */
     async initialize() {
         let module = await lazySasModule;
         let event = await formsetReadyPromise;
@@ -85,6 +96,9 @@ class AlbumImagePanelHandler {
         this.deleteButton.click(() => this.sas.deleteSelected())
     }
     
+    /**
+     * Find and initialize the cover image
+     */
     initializeCover(target) {
         // find the input containing the cover id and add the .cover-image class to the correct <li>
         let value = this.coverField.val();
@@ -93,6 +107,9 @@ class AlbumImagePanelHandler {
         inputField.parents(".ui-sortable-handle").addClass("cover-image")
     }
     
+    /**
+     * Initialize Drag-and-drop for image files
+     */
     initializeDragAndDrop(target) {
         target.ondrop = (e) => {$(target).removeClass("drag-highlight drag-highlight-hover"); this.dropHandler(e)}
         target.ondragover = (e) => {e.preventDefault(); $(target).addClass("drag-highlight-hover")};
@@ -102,6 +119,13 @@ class AlbumImagePanelHandler {
         $(window).on('dragleave', (e) => {$(target).removeClass("drag-highlight")});
     }
     
+    /**
+     * Add every given image file to the panel
+     * 
+     * Each file is loaded into an <img> for visualization.
+     * Afterwards, a blank formset is appended to the InlinePanel to which the image is then added.
+     * Finally SaS is synchronized.
+     */
     async addImages(files) {
         // iterate over the user selected upload files
         for (const file of files) {
@@ -131,15 +155,20 @@ class AlbumImagePanelHandler {
         }
     }
     
+    /**
+     * Show a file chooser dialog for uploading (multiple) images
+     */
     showImageFileChooser() {
         let fileInput = $('<input type="file" multiple="multiple"/>');
         
         fileInput.get(0).addEventListener('change', (inputEvent) => this.addImages(inputEvent.target.files));
         
         fileInput.click();
-        
     }
     
+    /**
+     * Handle/add dropped image files from drag-and-drop
+     */
     dropHandler(ev) {
         // Prevent file from being opened
         ev.preventDefault();

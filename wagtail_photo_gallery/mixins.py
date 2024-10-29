@@ -1,6 +1,7 @@
 
 import itertools
 
+from django.conf import settings
 from django.shortcuts import render
 from django.http import Http404
 
@@ -10,8 +11,23 @@ from wagtail.fields import StreamField
 from .blocks import GalleryBlock
 from .models import Album
 
+
+WAGTAIL_IMAGE_GALLERY_DETAIL_ROUTE = getattr(settings, 'WAGTAIL_IMAGE_GALLERY_DETAIL_ROUTE', r'^album/(.+)/$')
+
+
 class ImageGalleryMixin(RoutablePageMixin):
+    """
+    Extends the inheriting Page with a routable album detail page
+    
+    Every album "belonging" to a GalleryBlock on the page is served under the detail URL (default: '<page>/album/<ALBUM-SLUG>').
+    Hereby, the album collection must be either the same or a descendant of the GalleryBlock's collection.
+    
+    Customization of the served template is possible through overriding 'album_detail_template' or 'album_detail_template_extends'.
+    In the settings, WAGTAIL_IMAGE_GALLERY_DETAIL_ROUTE can be changed to set the default route.
+    """
+    
     album_detail_template = 'wagtail_photo_gallery/pages/album_detail.html'
+    album_detail_template_extends = 'base.html'
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -26,10 +42,15 @@ class ImageGalleryMixin(RoutablePageMixin):
         self._gallery_blocks = list(itertools.chain(*self._gallery_blocks))
         
     
-    @route(r'^album/(.+)/$')
+    @route(WAGTAIL_IMAGE_GALLERY_DETAIL_ROUTE)
     def serve_album(self, request, slug):
+        """
+        Serves a referenced album in as detail page
+    
+        Each GalleryBlock within a StreamField is searched for the album slug.
+        Invisible and non-descendant albums are excluded.
+        """
         
-        # search for the album slug in all gallery blogs
         for gallery in self._gallery_blocks:
             try:
                 collection = gallery.value['collection']

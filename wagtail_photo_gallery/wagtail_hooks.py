@@ -8,10 +8,12 @@ from wagtail import hooks
 from .views import album_model_viewset, collection_chooser_viewset
 
 
+# Add Album management to admin panel
 @hooks.register("register_admin_viewset")
 def register_viewset():
     return album_model_viewset
 
+# Register the collection chooser
 @hooks.register('register_admin_viewset')
 def register_collection_chooser_viewset():
     return collection_chooser_viewset
