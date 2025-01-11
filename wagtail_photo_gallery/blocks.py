@@ -32,9 +32,15 @@ class CollectionChooserBlock(_CollectionChooserBlock):
     
     Defaults to the root collection.
     """
+
+    def get_default(self):
+        """
+        The default choice for the block is the root collection
+        """
+        return get_root_collection_id() if self.meta.default is None else super().get_default()
     
     class Meta:
-        default=get_root_collection_id()
+        icon = "folder"
 
 
 class GalleryBlock(blocks.StructBlock):
