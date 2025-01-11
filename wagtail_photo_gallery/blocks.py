@@ -10,7 +10,7 @@ from wagtail.models import get_root_collection_id
 from .widgets import CollectionChooser
 
 class CollectionChooserBlock(blocks.ChooserBlock):
-    
+
     def get_form_state(self, value):
         # this function is required for wagtail > 2.12 (because it uses 'telepath')
         
@@ -24,16 +24,22 @@ class CollectionChooserBlock(blocks.ChooserBlock):
     def widget(self):
         return CollectionChooser()
 
+    def get_default(self):
+        """
+        The default choice for the block is the root collection
+        """
+        return get_root_collection_id() if self.meta.default is None else super().get_default()
+
     class Meta:
         icon = "folder"
-        
+
 
 class GalleryBlock(blocks.StructBlock):
     
     album_class = 'wagtail_photo_gallery.Album'
     
     title = blocks.CharBlock()
-    collection = CollectionChooserBlock(default=get_root_collection_id())
+    collection = CollectionChooserBlock()
     
     class Meta:
         template = 'blocks/photo_gallery.html'
